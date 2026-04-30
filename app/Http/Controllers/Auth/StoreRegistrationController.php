@@ -32,7 +32,7 @@ class StoreRegistrationController extends Controller
         $store = Store::create([
             'name'    => $request->store_name,
             'address' => $request->store_address,
-            "code'    => strtoupper(substr(md5($request->store_name), 0, 6)),
+            'invite_code'    => strtoupper(substr(md5($request->store_name), 0, 6)),
         ]);
 
         // Buat user sebagai admin toko
