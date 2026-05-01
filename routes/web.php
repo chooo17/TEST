@@ -35,6 +35,10 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     })->name('dashboard');
 });
 
+// Tambahkan ini jika belum ada
+Route::post('/products/{product}', [ProductController::class, 'update'])
+    ->middleware(['auth', 'role:superadmin|admin']);
+
 Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
     Route::resource('bahan', MaterialController::class);
     Route::post('/bahan/{bahan}/stock', [MaterialController::class, 'updateStock']);
