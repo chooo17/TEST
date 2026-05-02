@@ -138,14 +138,14 @@ export default function Menu({ onAdd, openCart, products = [], categories = [] }
                     overscroll-contain
                 "
             >
-                <div className="grid px-4 py-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid px-4 py-4 grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-4">
                     {filteredProducts.length > 0 ? (
                         filteredProducts.map((product) => (
                             <div
                                 key={product.id}
                                 className="bg-white/40 backdrop-blur-md rounded-2xl p-3 shadow-lg hover:scale-105 transition"
                             >
-                                <div className="relative h-36 flex items-center justify-center bg-gradient-to-br from-orange-300 to-orange-500 rounded-xl text-white text-2xl font-bold mb-2 overflow-hidden">
+                                <div className="relative aspect-square flex items-center justify-center bg-gradient-to-br from-orange-300 to-orange-500 rounded-xl text-white text-2xl font-bold mb-2 overflow-hidden">
                                     {product.image ? (
                                         <img
                                             src={`/storage/${product.image}`}

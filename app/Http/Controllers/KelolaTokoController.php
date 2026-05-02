@@ -36,6 +36,7 @@ class KelolaTokoController extends Controller
         'categories' => Category::all(),
         'materials'  => $materials,
         'users'      => $users,
+        'store'      => $user->store,
     ]);
 }
 

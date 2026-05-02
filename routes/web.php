@@ -11,6 +11,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\Auth\StoreRegistrationController;
+use App\Http\Controllers\StoreController;
 
 
 Route::get('/', function () {
@@ -63,6 +64,10 @@ Route::middleware(['auth', 'role:superadmin|user|admin'])->group(function () {
 Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
     Route::get('/kelolatoko', [KelolaTokoController::class, 'index'])
         ->name('kelolatoko');
+});
+
+Route::middleware(['auth', 'role:admin|superadmin'])->group(function () {
+    Route::post('/store/update', [StoreController::class, 'update'])->name('store.update');
 });
 
 require __DIR__.'/admin.php';

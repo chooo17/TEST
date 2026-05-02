@@ -10,7 +10,7 @@ class Store extends Model
     use HasFactory;
 
     protected $fillable = [
-    'name', 'code', 'address', 'phone', 'is_active', 'invite_code'
+    'name', 'code', 'address', 'phone', 'is_active', 'invite_code','logo',
 ];
 
 // Auto generate invite code

@@ -10,10 +10,13 @@ import {
     Bars3Icon,
 } from "@heroicons/react/24/solid";
 
-export default function Sidebar({ open, setOpen }) {
+export default function Sidebar({ open, setOpen, isDark}) {
     const { auth } = usePage().props;
+    const store = auth.store;
     const { url } = usePage();
     const roles = auth.roles || [];
+
+    
 
     const getDashboardLink = () => {
         if (roles.includes("superadmin")) return "/superadmin";
@@ -53,30 +56,43 @@ export default function Sidebar({ open, setOpen }) {
     );
 
     return (
-        <div
-            className={`
-                fixed top-0 left-0
-                h-screen z-40
-                bg-gradient-to-b from-orange-400 to-orange-500
-                text-white p-4
-                transition-all duration-300 ease-in-out rounded-r-[30px]
-                ${open ? "w-60" : "w-20"}
-                flex flex-col
-            `}
-        >
-            {/* HEADER */}
-            <div className="flex items-center justify-between mb-6">
-                <div className={`flex items-center transition-all duration-300 ${open ? "gap-2 opacity-100" : "opacity-0 w-0 overflow-hidden"}`}>
-                    <ApplicationLogo className="h-8 w-auto text-white" />
-                    <h1 className="font-bold text-lg whitespace-nowrap">Warkop</h1>
-                </div>
-                <button
-                    onClick={() => setOpen(!open)}
-                    className={`p-2 rounded-lg hover:bg-white/20 transition ${open ? "" : "mx-auto"}`}
-                >
-                    <Bars3Icon className="h-6 w-6" />
-                </button>
+        <div className={`fixed top-0 left-0 h-screen z-40 text-white p-4
+            transition-all duration-300 ease-in-out rounded-r-[30px]
+            ${isDark
+                ? "bg-gradient-to-b from-gray-800 to-gray-900 border-r border-gray-700"
+                : "bg-gradient-to-b from-orange-400 to-orange-500"}
+            ${open ? "w-60" : "w-20"} flex flex-col`}>
+
+
+           {/* HEADER */}
+<div className="flex items-center justify-between mb-6">
+    <div className={`flex items-center transition-all duration-300 ${open ? "gap-2 opacity-100" : "opacity-0 w-0 overflow-hidden"}`}>
+        
+        {/* Logo toko — pakai foto kalau ada, fallback initials */}
+        {store?.logo ? (
+            <img 
+                src={`/storage/${store.logo}`} 
+                alt={store.name}
+                className="h-8 w-8 rounded-lg object-cover"
+            />
+        ) : (
+            <div className="h-8 w-8 rounded-lg bg-white text-orange-500 flex items-center justify-center font-bold text-sm">
+                {store?.name?.charAt(0)?.toUpperCase() ?? "W"}
             </div>
+        )}
+
+        <h1 className="font-bold text-lg whitespace-nowrap">
+            {store?.name ?? "Warkop"}
+        </h1>
+    </div>
+
+    <button
+        onClick={() => setOpen(!open)}
+        className={`p-2 rounded-lg hover:bg-white/20 transition ${open ? "" : "mx-auto"}`}
+    >
+        <Bars3Icon className="h-6 w-6" />
+    </button>
+</div>
 
             {/* MENU */}
             <div className="space-y-1 mt-10 flex-1 overflow-y-auto no-scrollbar">
