@@ -26,6 +26,7 @@ export default function Kasir({ products = [], categories = [] }) {
     };
 
     return (
+         <AuthenticatedLayout hideSearch>
         <AuthenticatedLayout openCart={openCart}>
             <Head title="Kasir" />
 
