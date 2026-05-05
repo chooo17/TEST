@@ -70,6 +70,9 @@ export default function Menu({ onAdd, openCart, products = [], categories = [] }
             {/* HEADER */}
             <div className="flex px-6 justify-between items-center mb-2">
                 <h2 className="text-xl font-bold text-white">Semua menu</h2>
+                <div className="flex items-center bg-white/30 rounded-full px-3 py-1">
+                    <MagnifyingGlassIcon className="w-6 h-6 text-orange-500 drop-shadow-sm" />
+                </div>
             </div>
 
             <ListCategoryMenu
