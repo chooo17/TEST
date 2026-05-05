@@ -100,7 +100,7 @@ export default function ListCategoryMenu({ categories, selectedCategory, onSelec
                 onMouseLeave={stopDrag}
                 onMouseMove={handleMouseMove}
                 className="
-                flex gap-6 overflow-x-auto px-1 py-2
+                flex gap-4 overflow-x-auto px-1 py-2
                 cursor-grab active:cursor-grabbing 
                 no-scrollbar select-none
             "
@@ -111,7 +111,7 @@ export default function ListCategoryMenu({ categories, selectedCategory, onSelec
                     min-w-[120px] flex-shrink-0
                     backdrop-blur-md 
                     border border-white/40
-                    text-white px-6 py-3 rounded-xl shadow
+                    text-white px-6 py-2 rounded-xl shadow
                     transition text-sm font-medium
                     ${
                         selectedCategory === null
@@ -130,7 +130,7 @@ export default function ListCategoryMenu({ categories, selectedCategory, onSelec
                         min-w-[120px] flex-shrink-0
                         backdrop-blur-md 
                         border border-white/40
-                        text-white px-6 py-3 rounded-xl shadow
+                        text-white px-6 py-2 rounded-xl shadow
                         transition text-sm font-medium
                         ${
                             selectedCategory === cat.id

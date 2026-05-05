@@ -347,7 +347,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                     <PlusIcon className="w-4 h-4" /> Tambah Menu
                                 </button>
                             </div>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
                                 {filteredProducts.map((item) => (
                                     <div key={item.id} className="bg-white/20 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20 hover:scale-[1.02] transition-all duration-200 shadow">
                                         <div className="relative aspect-square bg-gradient-to-br from-orange-300 to-orange-500 flex items-center justify-center text-white text-2xl font-bold overflow-hidden">

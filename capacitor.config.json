@@ -1,0 +1,11 @@
+{
+    "appId": "com.warkop.pos",
+    "appName": "Warkop POS",
+    "server": {
+        "url": "https://test-production-3eea.up.railway.app",
+        "cleartext": false
+    },
+    "android": {
+        "allowMixedContent": false
+    }
+}

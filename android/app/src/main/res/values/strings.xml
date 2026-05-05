@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Warkop POS</string>
+    <string name="title_activity_main">Warkop POS</string>
+    <string name="package_name">com.warkop.pos</string>
+    <string name="custom_url_scheme">com.warkop.pos</string>
+</resources>
