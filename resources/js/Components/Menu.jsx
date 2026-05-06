@@ -66,9 +66,9 @@ export default function Menu({ onAdd, openCart, products = [], categories = [] }
     };
 
     return (
-        <div className="w-full min-w-[280px] bg-white/30 backdrop-blur-xl rounded-2xl p-3 border border-white/30 h-full min-h-0 flex flex-col">
+        <div className="w-full min-w-[280px] bg-white/30 backdrop-blur-xl rounded-2xl p-1.5 border border-white/30 h-full min-h-0 flex flex-col">
             {/* HEADER */}
-            <div className="flex px-6 justify-between items-center mb-2">
+            <div className="flex px-2 justify-between items-center mb-2">
                 <h2 className="text-xl font-bold text-white">Semua menu</h2>
                 <div className="flex items-center bg-white/30 rounded-full px-3 py-1">
                     <input
@@ -96,7 +96,7 @@ export default function Menu({ onAdd, openCart, products = [], categories = [] }
                 onMouseMove={handleMouseMove}
                 className="flex-1 overflow-y-auto pr-3 pl-1 pb-2 no-scrollbar cursor-grab active:cursor-grabbing select-none overscroll-contain"
             >
-                <div className="grid px-4 py-4 grid-cols-3 sm:grid-cols-4 lg:grid-cols-4 gap-3">
+                <div className="grid px-1 py-2 grid-cols-3 sm:grid-cols-4 lg:grid-cols-4 gap-3">
                     {filteredProducts.length > 0 ? (
                         filteredProducts.map((product) => (
                             <div
