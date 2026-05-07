@@ -18,11 +18,11 @@ export default function Welcome({ auth }) {
                 <div className="absolute inset-0">
 
                     {/* Gradient blobs */}
-                    <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-yellow-400/30 rounded-full blur-3xl animate-pulse"></div>
+                    <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-orange-400/30 rounded-full blur-3xl animate-pulse"></div>
 
                     <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
 
-                    <div className="absolute top-[30%] right-[20%] w-[300px] h-[300px] bg-yellow-300/20 rounded-full blur-3xl animate-bounce"></div>
+                    <div className="absolute top-[30%] right-[20%] w-[300px] h-[300px] bg-orange-300/20 rounded-full blur-3xl animate-bounce"></div>
 
                     {/* Grid effect */}
                     <div
@@ -35,14 +35,14 @@ export default function Welcome({ auth }) {
                     ></div>
 
                     {/* Glow */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-yellow-500/5 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-orange-500/5 to-transparent"></div>
                 </div>
 
                 {/* NAVBAR */}
                 <nav className="relative z-20 flex items-center justify-between px-6 py-6 lg:px-16">
 
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-500 shadow-lg"></div>
+                        <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-orange-300 to-orange-500 shadow-lg"></div>
 
                         <h1 className="text-2xl lg:text-3xl font-black text-white tracking-widest">
                             WERP
@@ -54,7 +54,7 @@ export default function Welcome({ auth }) {
                         {auth.user ? (
                             <Link
                                 href={getDashboardLink()}
-                                className="px-6 py-2.5 rounded-full bg-white text-black font-semibold hover:scale-105 transition-all duration-300 shadow-2xl"
+                                className="px-6 py-2.5 rounded-full bg-white text-white font-semibold hover:scale-105 transition-all duration-300 shadow-2xl"
                             >
                                 Dashboard
                             </Link>
@@ -69,7 +69,7 @@ export default function Welcome({ auth }) {
 
                                 <Link
                                     href={route("register")}
-                                    className="px-6 py-2.5 rounded-full bg-gradient-to-r from-yellow-300 to-yellow-500 text-black font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(255,215,0,0.35)]"
+                                    className="px-6 py-2.5 rounded-full bg-gradient-to-r from-orange-300 to-orange-500 text-white font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(255,215,0,0.35)]"
                                 >
                                     Get Started
                                 </Link>
@@ -84,7 +84,7 @@ export default function Welcome({ auth }) {
 
                     {/* Badge */}
                     <div className="mb-8">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-yellow-400/20 bg-yellow-400/10 backdrop-blur-xl text-yellow-300 text-sm font-medium shadow-xl">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-orange-400/20 bg-orange-400/10 backdrop-blur-xl text-orange-300 text-sm font-medium shadow-xl">
                             ✨ ERP Modern Untuk UMKM Indonesia
                         </div>
                     </div>
@@ -93,7 +93,7 @@ export default function Welcome({ auth }) {
                     <h1 className="max-w-6xl text-5xl sm:text-7xl lg:text-8xl font-black leading-[0.95] tracking-tight text-white">
 
                         Kelola Bisnis Lebih
-                        <span className="block bg-gradient-to-r from-yellow-300 via-yellow-400 to-orange-400 bg-clip-text text-transparent">
+                        <span className="block bg-gradient-to-r from-orange-300 via-orange-400 to-orange-400 bg-clip-text text-transparent">
                             Cepat & Modern
                         </span>
 
@@ -113,7 +113,7 @@ export default function Welcome({ auth }) {
 
                         <Link
                             href={route("register")}
-                            className="px-8 py-4 rounded-2xl bg-gradient-to-r from-yellow-300 to-yellow-500 text-black font-bold text-lg hover:scale-105 transition-all duration-300 shadow-[0_0_50px_rgba(255,215,0,0.35)]"
+                            className="px-8 py-4 rounded-2xl bg-gradient-to-r from-orange-300 to-orange-500 text-white font-bold text-lg hover:scale-105 transition-all duration-300 shadow-[0_0_50px_rgba(255,215,0,0.35)]"
                         >
                             Mulai Gratis
                         </Link>
@@ -131,7 +131,7 @@ export default function Welcome({ auth }) {
                     <div className="relative mt-20 w-full max-w-6xl">
 
                         {/* Glow */}
-                        <div className="absolute inset-0 bg-yellow-400/20 blur-3xl rounded-full"></div>
+                        <div className="absolute inset-0 bg-orange-400/20 blur-3xl rounded-full"></div>
 
                         {/* Dashboard mockup */}
                         <div className="relative rounded-[32px] border border-white/10 bg-white/5 backdrop-blur-2xl shadow-2xl overflow-hidden">
@@ -139,7 +139,7 @@ export default function Welcome({ auth }) {
                             {/* Top bar */}
                             <div className="flex items-center gap-2 px-6 py-4 border-b border-white/10">
                                 <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                                <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                <div className="w-3 h-3 rounded-full bg-orange-400"></div>
                                 <div className="w-3 h-3 rounded-full bg-green-400"></div>
                             </div>
 
@@ -174,26 +174,26 @@ export default function Welcome({ auth }) {
                                                 1.284
                                             </h2>
 
-                                            <p className="mt-2 text-yellow-300 text-sm">
+                                            <p className="mt-2 text-orange-300 text-sm">
                                                 Real-time update
                                             </p>
                                         </div>
 
                                     </div>
 
-                                    <div className="h-64 rounded-3xl bg-gradient-to-br from-yellow-400/10 to-orange-500/10 border border-white/10 flex items-end p-6">
+                                    <div className="h-64 rounded-3xl bg-gradient-to-br from-orange-400/10 to-orange-500/10 border border-white/10 flex items-end p-6">
 
                                         <div className="flex items-end gap-3 w-full h-full">
 
-                                            <div className="w-full bg-yellow-300 rounded-t-xl h-[40%] animate-pulse"></div>
+                                            <div className="w-full bg-orange-300 rounded-t-xl h-[40%] animate-pulse"></div>
 
-                                            <div className="w-full bg-yellow-400 rounded-t-xl h-[70%]"></div>
+                                            <div className="w-full bg-orange-400 rounded-t-xl h-[70%]"></div>
 
                                             <div className="w-full bg-orange-400 rounded-t-xl h-[55%]"></div>
 
-                                            <div className="w-full bg-yellow-500 rounded-t-xl h-[85%]"></div>
+                                            <div className="w-full bg-orange-500 rounded-t-xl h-[85%]"></div>
 
-                                            <div className="w-full bg-yellow-300 rounded-t-xl h-[65%]"></div>
+                                            <div className="w-full bg-orange-300 rounded-t-xl h-[65%]"></div>
 
                                         </div>
 
@@ -244,19 +244,19 @@ export default function Welcome({ auth }) {
                                         </div>
                                     </div>
 
-                                    <div className="rounded-2xl bg-gradient-to-br from-yellow-300 to-yellow-500 p-5 text-black">
+                                    <div className="rounded-2xl bg-gradient-to-br from-orange-300 to-orange-500 p-5 text-white">
                                         <p className="font-bold text-lg">
                                             Siap Digitalisasi UMKM?
                                         </p>
 
-                                        <p className="mt-2 text-black/70">
+                                        <p className="mt-2 text-white/70">
                                             Gunakan WERP untuk mengelola bisnis
                                             lebih modern dan efisien.
                                         </p>
 
                                         <Link
                                             href={route("register")}
-                                            className="mt-5 inline-flex px-5 py-2 rounded-xl bg-black text-yellow-300 font-semibold"
+                                            className="mt-5 inline-flex px-5 py-2 rounded-xl bg-black text-orange-300 font-semibold"
                                         >
                                             Mulai Sekarang
                                         </Link>
