@@ -71,7 +71,7 @@ function Notification({ notif }) {
 function TabBtn({ active, onClick, icon: Icon, label }) {
     return (
         <button type="button" onClick={onClick}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200
+            className={`w-full flex items-center justify-center gap-2 px-2 py-3 rounded-xl font-semibold text-sm transition-all duration-200
                 ${active ? "bg-white text-orange-500 shadow-md" : "bg-white/20 text-white hover:bg-white/30"}`}>
             <Icon className="w-4 h-4" />{label}
         </button>
@@ -319,12 +319,30 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                 {/* TOP BAR */}
                 <GlassCard className="px-5 py-3 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
                     <h1 className="text-xl font-bold text-white">Kelola Toko</h1>
-                    <div className="flex gap-2 flex-wrap">
-                        <TabBtn active={tab === "menu"} onClick={() => setTab("menu")} icon={ShoppingBagIcon} label="Menu" />
-                        <TabBtn active={tab === "bahan"} onClick={() => setTab("bahan")} icon={CubeIcon} label="Bahan" />
-                        {isSuperadmin && <TabBtn active={tab === "pengguna"} onClick={() => setTab("pengguna")} icon={UserGroupIcon} label="Pengguna" />}
-                        <TabBtn active={tab === "toko"} onClick={() => setTab("toko")} icon={BuildingStorefrontIcon} label="Profil Toko" />
-                    </div>
+                    <div className="grid grid-cols-3 gap-2 w-full sm:flex sm:flex-wrap">
+
+    <TabBtn
+        active={tab === "menu"}
+        onClick={() => setTab("menu")}
+        icon={ShoppingBagIcon}
+        label="Menu"
+    />
+
+    <TabBtn
+        active={tab === "bahan"}
+        onClick={() => setTab("bahan")}
+        icon={CubeIcon}
+        label="Bahan"
+    />
+
+    <TabBtn
+        active={tab === "toko"}
+        onClick={() => setTab("toko")}
+        icon={BuildingStorefrontIcon}
+        label="Toko"
+    />
+
+</div>
                     <div className="flex items-center bg-white/20 rounded-full px-3 py-1.5 gap-2 w-full sm:w-64">
                         <MagnifyingGlassIcon className="w-4 h-4 text-white/70 shrink-0" />
                         <input placeholder="Cari..." value={search} onChange={(e) => setSearch(e.target.value)}
