@@ -30,6 +30,8 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
     });
 
     const [isMobile, setIsMobile] = useState(false);
+    
+
     useEffect(() => {
         const checkMobile = () => {
             const mobile = window.innerWidth < 768;
@@ -133,26 +135,7 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                             : "bg-white/80 border-orange-200"} backdrop-blur-xl`}>
                         <div className="flex items-center justify-around px-2 py-2 safe-area-bottom">
                             {bottomNavItems.map((item, i) => {
-                                <Link
-    href={route("logout")}
-    method="post"
-    as="button"
-    className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all min-w-[60px]"
->
-    <div className={`p-1.5 rounded-xl transition-all
-        ${isDark
-            ? "text-red-400"
-            : "text-red-500"}`}>
-        <ArrowRightOnRectangleIcon className="w-5 h-5" />
-    </div>
-
-    <span className={`text-[10px] font-semibold
-        ${isDark
-            ? "text-red-400"
-            : "text-red-500"}`}>
-        Logout
-    </span>
-</Link>
+                               
                                 const active = isActive(item.link);
                                 return (
                                     <Link key={i} href={item.link}
@@ -176,6 +159,26 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                                     </Link>
                                 );
                             })}
+                             <Link
+    href={route("logout")}
+    method="post"
+    as="button"
+    className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all min-w-[60px]"
+>
+    <div className={`p-1.5 rounded-xl transition-all
+        ${isDark
+            ? "text-red-400"
+            : "text-red-500"}`}>
+        <ArrowRightOnRectangleIcon className="w-5 h-5" />
+    </div>
+
+    <span className={`text-[10px] font-semibold
+        ${isDark
+            ? "text-red-400"
+            : "text-red-500"}`}>
+        Logout
+    </span>
+</Link>
                         </div>
                     </div>
                 )}
