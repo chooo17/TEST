@@ -123,7 +123,7 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                 )}
 
                 {/* MAIN */}
-                <main className={`flex-1 overflow-auto px-3 pt-3 ${isMobile ? "pb-20" : "pb-4"}`}>
+                <main className={`flex-1 overflow-auto px-0 pt-1 ${isMobile ? "pb-20" : "pb-4"}`}>
                     {children}
                 </main>
 

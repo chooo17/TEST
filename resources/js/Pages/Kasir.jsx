@@ -29,10 +29,10 @@ export default function Kasir({ products = [], categories = [] }) {
         <AuthenticatedLayout hideSearch openCart={openCart}>
             <Head title="Kasir" />
 
-            <div className="flex gap-4 h-full overflow-hidden">
+            <div className="flex gap-1 h-full overflow-hidden px-1">
 
                 {/* MENU */}
-                <div className="flex-1 min-w-0 min-h-0">
+                <div className="flex-1 min-w-0 min-h-0 px-0">
                     <Menu 
                         onAdd={handleAddToCart} 
                         openCart={openCart}
