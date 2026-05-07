@@ -6,6 +6,7 @@ import {
     ChartBarIcon,
     Cog6ToothIcon,
     XMarkIcon,
+    ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid";
 import { Link, usePage } from "@inertiajs/react";
 import Sidebar from "@/Components/Sidebar";
@@ -29,8 +30,6 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
     });
 
     const [isMobile, setIsMobile] = useState(false);
-    const [showMobileSidebar, setShowMobileSidebar] = useState(false);
-
     useEffect(() => {
         const checkMobile = () => {
             const mobile = window.innerWidth < 768;
@@ -70,22 +69,6 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                 <Sidebar open={open} setOpen={setOpen} isDark={isDark} />
             )}
 
-            {/* ── MOBILE SIDEBAR OVERLAY ───────────────────────────── */}
-            {isMobile && showMobileSidebar && (
-                <>
-                    <div className="fixed inset-0 bg-black/50 z-40 backdrop-blur-sm"
-                        onClick={() => setShowMobileSidebar(false)} />
-                    <div className="fixed top-0 left-0 h-full z-50 w-64">
-                        <Sidebar open={true} setOpen={() => setShowMobileSidebar(false)} isDark={isDark} />
-                        <button
-                            onClick={() => setShowMobileSidebar(false)}
-                            className="absolute top-4 right-4 p-1.5 rounded-lg bg-white/20 text-white z-50">
-                            <XMarkIcon className="w-5 h-5" />
-                        </button>
-                    </div>
-                </>
-            )}
-
             {/* ── DESKTOP SPACER ───────────────────────────────────── */}
             {!isMobile && (
                 <div className={`transition-all duration-300 shrink-0 ${open ? "w-60" : "w-20"}`} />
@@ -98,13 +81,7 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                 {isMobile && (
                     <div className={`flex items-center justify-between px-4 py-3 shrink-0
                         ${isDark ? "bg-slate-900/80" : "bg-white/10"} backdrop-blur-sm border-b border-white/10`}>
-                        <div className="flex items-center gap-3">
-                            <button onClick={() => setShowMobileSidebar(true)}
-                                className="p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white transition">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                                </svg>
-                            </button>
+                        <div className="flex items-center">
                             <span className="text-white font-bold text-lg">
                                 {auth?.store?.name ?? "Warkop POS"}
                             </span>
@@ -156,6 +133,26 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                             : "bg-white/80 border-orange-200"} backdrop-blur-xl`}>
                         <div className="flex items-center justify-around px-2 py-2 safe-area-bottom">
                             {bottomNavItems.map((item, i) => {
+                                <Link
+    href={route("logout")}
+    method="post"
+    as="button"
+    className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all min-w-[60px]"
+>
+    <div className={`p-1.5 rounded-xl transition-all
+        ${isDark
+            ? "text-red-400"
+            : "text-red-500"}`}>
+        <ArrowRightOnRectangleIcon className="w-5 h-5" />
+    </div>
+
+    <span className={`text-[10px] font-semibold
+        ${isDark
+            ? "text-red-400"
+            : "text-red-500"}`}>
+        Logout
+    </span>
+</Link>
                                 const active = isActive(item.link);
                                 return (
                                     <Link key={i} href={item.link}
