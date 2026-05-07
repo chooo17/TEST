@@ -135,7 +135,6 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
             h-16 flex items-center justify-around
             rounded-[26px]
             px-2 py-2
-            shadow-2xl
             border
             backdrop-blur-2xl
             transition-all duration-300
