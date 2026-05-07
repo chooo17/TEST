@@ -41,16 +41,32 @@ export default function Register() {
     return (
         <>
             <Head title="Register" />
+            <div className="absolute inset-0 overflow-hidden">
+
+    <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-orange-400/20 rounded-full blur-3xl animate-pulse"></div>
+
+    <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+
+    <div className="absolute inset-0 opacity-[0.05]"
+        style={{
+            backgroundImage:
+                "linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+        }}
+    ></div>
+
+</div>
 
             <div className="
                 min-h-screen flex items-center justify-center
-                bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950
+                bg-black overflow-hidden relative
                 px-4
             ">
                 <div className="
+                    relative z-10
                     w-full max-w-md
-                    bg-white/5 backdrop-blur-xl
-                    border border-white/10
+                    bg-white/10 backdrop-blur-xl
+                    border border-orange-400/10
                     rounded-2xl p-6 sm:p-8 shadow-xl
                 ">
                     {/* HEADER */}
@@ -66,13 +82,13 @@ export default function Register() {
                     </div>
 
                     {/* TOGGLE MODE */}
-                    <div className="flex rounded-xl bg-white/5 border border-white/10 p-1 mb-6">
+                    <div className="flex rounded-xl bg-white/10 border border-orange-400/10 p-1 mb-6">
                         <button
                             type="button"
                             onClick={() => switchMode("store")}
                             className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-all
                                 ${mode === "store"
-                                    ? "bg-indigo-600 text-white"
+                                    ? "bg-orange-600 text-white"
                                     : "text-gray-400 hover:text-white"}`}
                         >
                             <Store className="w-4 h-4" />
@@ -83,7 +99,7 @@ export default function Register() {
                             onClick={() => switchMode("user")}
                             className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-all
                                 ${mode === "user"
-                                    ? "bg-indigo-600 text-white"
+                                    ? "bg-orange-600 text-white"
                                     : "text-gray-400 hover:text-white"}`}
                         >
                             <KeyRound className="w-4 h-4" />
@@ -105,7 +121,7 @@ export default function Register() {
                                             type="text"
                                             value={data.store_name}
                                             placeholder="Contoh: Warkop Bahagia"
-                                            className="w-full pl-10 py-2.5 bg-white/5 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                            className="w-full pl-10 py-2.5 bg-white/10 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                                             onChange={(e) => setData("store_name", e.target.value)}
                                             required
                                         />
@@ -120,7 +136,7 @@ export default function Register() {
                                             type="text"
                                             value={data.store_address}
                                             placeholder="Alamat toko"
-                                            className="w-full px-4 py-2.5 bg-white/5 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                            className="w-full px-4 py-2.5 bg-white/10 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                                             onChange={(e) => setData("store_address", e.target.value)}
                                         />
                                     </div>
@@ -139,7 +155,7 @@ export default function Register() {
                                         type="text"
                                         value={data.invite_code}
                                         placeholder="Masukkan kode toko (contoh: AB12CD34)"
-                                        className="w-full pl-10 py-2.5 bg-white/5 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500 uppercase"
+                                        className="w-full pl-10 py-2.5 bg-white/10 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-orange-500 uppercase"
                                         onChange={(e) => setData("invite_code", e.target.value.toUpperCase())}
                                         required
                                     />
@@ -157,7 +173,7 @@ export default function Register() {
                                     type="text"
                                     value={data.name}
                                     placeholder="Nama kamu"
-                                    className="w-full pl-10 py-2.5 bg-white/5 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                    className="w-full pl-10 py-2.5 bg-white/10 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                                     onChange={(e) => setData("name", e.target.value)}
                                     required
                                 />
@@ -174,7 +190,7 @@ export default function Register() {
                                     type="email"
                                     value={data.email}
                                     placeholder="email@kamu.com"
-                                    className="w-full pl-10 py-2.5 bg-white/5 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                    className="w-full pl-10 py-2.5 bg-white/10 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                                     onChange={(e) => setData("email", e.target.value)}
                                     required
                                 />
@@ -190,7 +206,7 @@ export default function Register() {
                                 <TextInput
                                     type={showPassword ? "text" : "password"}
                                     value={data.password}
-                                    className="w-full pl-10 pr-10 py-2.5 bg-white/5 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                    className="w-full pl-10 pr-10 py-2.5 bg-white/10 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                                     onChange={(e) => setData("password", e.target.value)}
                                     required
                                 />
@@ -210,7 +226,7 @@ export default function Register() {
                                 <TextInput
                                     type={showConfirm ? "text" : "password"}
                                     value={data.password_confirmation}
-                                    className="w-full pl-10 pr-10 py-2.5 bg-white/5 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                    className="w-full pl-10 pr-10 py-2.5 bg-white/10 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                                     onChange={(e) => setData("password_confirmation", e.target.value)}
                                     required
                                 />
@@ -224,19 +240,31 @@ export default function Register() {
 
                         {/* BUTTON */}
                         <PrimaryButton
-                            className="w-full justify-center bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg"
+                            className="w-full justify-center bg-gradient-to-r from-orange-400 to-orange-500 hover:scale-[1.02] text-white font-semibold py-2.5 rounded-lg"
                             disabled={processing}
                         >
                             {processing
                                 ? "Memproses..."
                                 : mode === "store" ? "Buat Toko & Daftar" : "Gabung Toko"}
                         </PrimaryButton>
+
+                        <div className="text-center mb-8">
+
+    <h1 className="text-5xl font-black text-white tracking-widest">
+        WERP
+    </h1>
+
+    <p className="mt-3 text-white/60">
+        Mempermudah pencacatan dan laporan UMKM mu
+    </p>
+
+</div>
                     </form>
 
                     {/* LOGIN LINK */}
                     <div className="mt-6 text-center text-sm text-gray-400">
                         Sudah punya akun?{" "}
-                        <Link href={route("login")} className="text-indigo-400 font-semibold">
+                        <Link href={route("login")} className="text-orange-400 font-semibold">
                             Login
                         </Link>
                     </div>

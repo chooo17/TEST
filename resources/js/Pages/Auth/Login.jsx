@@ -85,16 +85,32 @@ export default function Login({ status, canResetPassword }) {
     return (
         <>
             <Head title="Login" />
+            <div className="absolute inset-0 overflow-hidden">
+
+    <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-orange-400/20 rounded-full blur-3xl animate-pulse"></div>
+
+    <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-orange-500/20 rounded-full blur-3xl animate-pulse"></div>
+
+    <div className="absolute inset-0 opacity-[0.05]"
+        style={{
+            backgroundImage:
+                "linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+        }}
+    ></div>
+
+</div>
 
             <div className="
                 min-h-screen flex items-center justify-center
-                bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950
+                bg-black overflow-hidden relative
                 px-4
             ">
                 <div className="
+                    relative z-10
                     w-full max-w-md
-                    bg-white/5 backdrop-blur-xl
-                    border border-white/10
+                    bg-white/10 backdrop-blur-xl
+                    border border-orange-400/10
                     rounded-2xl
                     p-6 sm:p-8
                     shadow-xl
@@ -103,10 +119,10 @@ export default function Login({ status, canResetPassword }) {
                     {/* HEADER */}
                     <div className="text-center mb-6">
                         <h1 className="text-2xl font-bold text-white">
-                            Welcome Back 👋
+                            WERP
                         </h1>
                         <p className="text-sm text-gray-400 mt-1">
-                            Login untuk melanjutkan
+                            Mempermudah pencacatan dan laporan UMKM mu
                         </p>
                     </div>
 
@@ -126,7 +142,7 @@ export default function Login({ status, canResetPassword }) {
                                 <TextInput
                                     type="email"
                                     value={data.email}
-                                    className="w-full pl-10 py-2.5 bg-white/5 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                    className="w-full pl-10 py-2.5 bg-white/10 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                                     onChange={(e) =>
                                         setData("email", e.target.value)
                                     }
@@ -143,7 +159,7 @@ export default function Login({ status, canResetPassword }) {
                                 <TextInput
                                     type={showPassword ? "text" : "password"}
                                     value={data.password}
-                                    className="w-full pl-10 pr-10 py-2.5 bg-white/5 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-indigo-500"
+                                    className="w-full pl-10 pr-10 py-2.5 bg-white/10 border border-gray-600 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                                     onChange={(e) =>
                                         setData("password", e.target.value)
                                     }
@@ -192,7 +208,7 @@ export default function Login({ status, canResetPassword }) {
                             {canResetPassword && (
                                 <Link
                                     href={route("password.request")}
-                                    className="text-indigo-400 hover:text-indigo-300"
+                                    className="text-orange-400 hover:text-orange-300"
                                 >
                                     Forgot?
                                 </Link>
@@ -203,7 +219,7 @@ export default function Login({ status, canResetPassword }) {
                         <PrimaryButton
                             className="
                                 w-full justify-center
-                                bg-indigo-600 hover:bg-indigo-700
+                                bg-gradient-to-r from-orange-400 to-orange-500 hover:scale-[1.02]
                                 text-white font-semibold
                                 py-2.5 rounded-lg
                                 transition
@@ -225,7 +241,7 @@ export default function Login({ status, canResetPassword }) {
     <p>Belum punya akun?</p>
     <div className="flex gap-3 justify-center mt-2">
         <Link href={route('register.store')}
-            className="px-4 py-2 rounded-lg bg-indigo-600 text-white text-xs font-semibold hover:bg-indigo-700 transition">
+            className="px-4 py-2 rounded-lg bg-orange-600 text-white text-xs font-semibold hover:bg-orange-700 transition">
             Daftar Toko Baru
         </Link>
         <Link href={route('register.user')}
