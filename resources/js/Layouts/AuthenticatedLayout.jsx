@@ -201,10 +201,6 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
     <div className="flex items-center justify-center text-red-400">
         <ArrowRightOnRectangleIcon className="w-5 h-5" />
     </div>
-
-   <span className="absolute -bottom-4 text-[9px] font-semibold text-red-400 opacity-70">
-        Logout
-    </span>
 </Link>
                         </div>
                     </div>
