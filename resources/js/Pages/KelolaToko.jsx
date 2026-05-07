@@ -71,7 +71,7 @@ function Notification({ notif }) {
 function TabBtn({ active, onClick, icon: Icon, label }) {
     return (
         <button type="button" onClick={onClick}
-            className={`w-full flex items-center justify-center gap-2 px-2 py-3 rounded-xl font-semibold text-sm transition-all duration-200
+            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-2 sm:px-5 py-3 sm:py-2.5 rounded-xl font-semibold text-sm transition-all duration-200
                 ${active ? "bg-white text-orange-500 shadow-md" : "bg-white/20 text-white hover:bg-white/30"}`}>
             <Icon className="w-4 h-4" />{label}
         </button>
@@ -319,7 +319,10 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                 {/* TOP BAR */}
                 <GlassCard className="px-5 py-3 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
                     <h1 className="text-xl font-bold text-white">Kelola Toko</h1>
-                    <div className="grid grid-cols-3 gap-2 w-full sm:flex sm:flex-wrap">
+                    <div className="
+    grid grid-cols-3 gap-2 w-full
+    sm:flex sm:flex-wrap sm:w-auto
+">
 
     <TabBtn
         active={tab === "menu"}
