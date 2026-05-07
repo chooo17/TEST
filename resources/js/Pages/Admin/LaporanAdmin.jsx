@@ -630,7 +630,7 @@ function JamSibuk({ riwayat }) {
                 </div>
                 <div className="flex items-center gap-1.5 bg-orange-500/20 px-3 py-1 rounded-full">
                     <ClockIcon className="w-3.5 h-3.5 text-orange-400" />
-                    <span className="text-xs text-orange-300 font-medium">{peak.jam}:00</span>
+                    <span className="text-xs text-white-800 font-medium">{peak.jam}:00</span>
                 </div>
             </div>
             <div className="h-[120px]">
