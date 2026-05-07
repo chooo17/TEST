@@ -129,12 +129,12 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
 
                 {/* ── MOBILE BOTTOM NAV ─────────────────────────────── */}
                 {isMobile && (
-    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 md:hidden w-[92%] max-w-md">
+    <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 md:hidden w-[88%] max-w-md">
 
         <div className={`
-            flex items-center justify-around
-            rounded-[30px]
-            px-3 py-3
+            h-16 flex items-center justify-around
+            rounded-[26px]
+            px-2 py-2
             shadow-2xl
             border
             backdrop-blur-2xl
@@ -153,11 +153,11 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
     className={`
         relative
         flex items-center justify-center
-        w-14 h-14
+        w-12 h-12
         rounded-full
         transition-all duration-300
         ${active
-            ? "bg-white shadow-[0_8px_30px_rgba(255,115,0,0.35)] -translate-y-5 scale-110"
+            ? "bg-white shadow-[0_4px_16px_rgba(255,115,0,0.25)] -translate-y-3 scale-105"
             : "bg-transparent"}
     `}
 >
@@ -173,7 +173,7 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                                             <item.icon className="w-5 h-5" />
                                         </div>
                                       <span className={`
-    absolute -bottom-5
+    absolute -bottom-4
     text-[10px]
     font-semibold
     whitespace-nowrap
@@ -203,7 +203,7 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
         <ArrowRightOnRectangleIcon className="w-5 h-5" />
     </div>
 
-   <span className="absolute -bottom-5 text-[10px] font-semibold text-red-400">
+   <span className="absolute -bottom-4 text-[9px] font-semibold text-red-400 opacity-70">
         Logout
     </span>
 </Link>
