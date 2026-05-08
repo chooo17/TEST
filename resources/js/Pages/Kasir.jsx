@@ -31,26 +31,36 @@ export default function Kasir({ products = [], categories = [], qris_image = nul
 
             <div className="flex gap-1 h-full overflow-hidden px-1">
 
-                {/* MENU */}
+                {/* MENU — full width on mobile, shrinks on desktop when cart open */}
                 <div className="flex-1 min-w-0 min-h-0 px-0">
-                    <Menu 
-                        onAdd={handleAddToCart} 
+                    <Menu
+                        onAdd={handleAddToCart}
                         openCart={openCart}
                         products={products}
                         categories={categories}
                     />
                 </div>
 
-                {/* 🔥 CART */}
-                <div
-                    className={`${openCart ? "w-[320px]" : "w-0 overflow-hidden"}`}
-                >
+                {/* CART — side panel on desktop only */}
+                <div className={`hidden sm:block shrink-0 transition-all duration-300 ${openCart ? "w-[320px]" : "w-0 overflow-hidden"}`}>
                     <Cart
                         cart={cart}
                         open={openCart}
                         setOpen={setOpenCart}
                         setCart={setCart}
                         qrisImage={qris_image}
+                    />
+                </div>
+
+                {/* CART — full screen overlay on mobile */}
+                <div className="sm:hidden">
+                    <Cart
+                        cart={cart}
+                        open={openCart}
+                        setOpen={setOpenCart}
+                        setCart={setCart}
+                        qrisImage={qris_image}
+                        isMobile
                     />
                 </div>
 
