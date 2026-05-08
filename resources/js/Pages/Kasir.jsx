@@ -22,7 +22,6 @@ export default function Kasir({ products = [], categories = [], qris_image = nul
             return [...prev, { ...item, qty: 1 }];
         });
 
-        setOpenCart(true);
     };
 
     return (
