@@ -19,35 +19,7 @@ export default function Cart({ cart, open, setOpen, setCart }) {
     const [notification, setNotification] = useState(null);
     const [processing, setProcessing] = useState(false);
 
-    // =========================
-    // GENERATE ORDER ID
-    // =========================
-    const generateOrderId = () => {
-        const date = new Date();
-
-        const yy = String(date.getFullYear()).slice(2);
-        const mm = String(date.getMonth() + 1).padStart(2, "0");
-        const dd = String(date.getDate()).padStart(2, "0");
-
-        const key = `order-counter-${yy}${mm}${dd}`;
-        let counter = parseInt(localStorage.getItem(key) || "0");
-
-        counter += 1;
-        localStorage.setItem(key, counter);
-
-        const number = String(counter).padStart(3, "0");
-
-        return `#ORD-${yy}${mm}${dd}-${number}`;
-    };
-
-    // =========================
-    // GENERATE SAAT BUKA CART
-    // =========================
-    useEffect(() => {
-        if (open && cart.length > 0 && !orderId) {
-            setOrderId(generateOrderId());
-        }
-    }, [open, cart]);
+    // orderId is populated from server invoice_no after successful payment
 
     // =========================
     // AUTO CLOSE NOTIFICATION
@@ -183,7 +155,6 @@ export default function Cart({ cart, open, setOpen, setCart }) {
         const saleItems = cart.map((item) => ({
             product_id: item.id,
             qty: item.qty,
-            price: item.price,
         }));
 
         try {
@@ -199,19 +170,18 @@ export default function Cart({ cart, open, setOpen, setCart }) {
                     items: saleItems,
                     payment_method: payment,
                     paid_amount: paid,
-                    subtotal: total,
                 }),
             });
 
             const data = await response.json();
 
             if (data.success) {
-                const change = paid - total;
+                setOrderId(data.invoice_no ?? "");
                 setNotification({
                     type: "success",
                     title: "Pembayaran Berhasil!",
-                    message: `Kembalian: ${formatCurrency(change)}`,
-                    invoice: orderId,
+                    message: `Kembalian: ${formatCurrency(data.change)}`,
+                    invoice: data.invoice_no,
                 });
 
                 // Reset everything

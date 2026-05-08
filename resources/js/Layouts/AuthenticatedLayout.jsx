@@ -129,79 +129,57 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
 
                 {/* ── MOBILE BOTTOM NAV ─────────────────────────────── */}
                 {isMobile && (
-    <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-50 md:hidden w-[88%] max-w-md">
-
-        <div className={`
-            h-16 flex items-center justify-around
-            rounded-[26px]
-            px-2 py-2
-            border
-            backdrop-blur-2xl
-            transition-all duration-300
-            ${isDark
-                ? "bg-slate-900/90 border-slate-700"
-                : "bg-white/80 border-orange-100"}
-        `}>
+                    <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-50 md:hidden w-[88%] max-w-md">
+                        <div className={`
+                            h-16 flex items-center justify-around
+                            rounded-[26px] px-2 py-2 border backdrop-blur-2xl
+                            transition-all duration-300
+                            ${isDark
+                                ? "bg-slate-900/90 border-slate-700"
+                                : "bg-white/80 border-orange-100"}
+                        `}>
                             {bottomNavItems.map((item, i) => {
-                               
                                 const active = isActive(item.link);
                                 return (
-                                   <Link
-    key={i}
-    href={item.link}
-    className={`
-        relative
-        flex items-center justify-center
-        w-12 h-12
-        rounded-full
-        transition-all duration-300
-        ${active
-            ? "bg-white shadow-[0_4px_16px_rgba(255,115,0,0.25)] -translate-y-3 scale-105"
-            : "bg-transparent"}
-    `}
->
+                                    <Link
+                                        key={i}
+                                        href={item.link}
+                                        className={`
+                                            relative flex items-center justify-center
+                                            w-12 h-12 rounded-full transition-all duration-300
+                                            ${active
+                                                ? "bg-white shadow-[0_4px_16px_rgba(255,115,0,0.25)] -translate-y-3 scale-105"
+                                                : "bg-transparent"}
+                                        `}
+                                    >
                                         <div className={`
-    flex items-center justify-center
-    transition-all duration-300
-    ${active
-        ? "text-orange-500"
-        : isDark
-            ? "text-slate-400"
-            : "text-orange-400"}
-`}>
+                                            flex items-center justify-center transition-all duration-300
+                                            ${active
+                                                ? "text-orange-500"
+                                                : isDark ? "text-slate-400" : "text-orange-400"}
+                                        `}>
                                             <item.icon className="w-5 h-5" />
                                         </div>
-                                      <span className={`
-    absolute -bottom-4
-    text-[10px]
-    font-semibold
-    whitespace-nowrap
-    transition-all duration-300
-    ${active
-        ? "opacity-100 text-orange-500"
-        : "opacity-0"}
-`}>
+                                        <span className={`
+                                            absolute -bottom-4 text-[10px] font-semibold
+                                            whitespace-nowrap transition-all duration-300
+                                            ${active ? "opacity-100 text-orange-500" : "opacity-0"}
+                                        `}>
                                             {item.name}
                                         </span>
                                     </Link>
                                 );
                             })}
-                             <Link
-    href={route("logout")}
-    method="post"
-    as="button"
-    className="
-    relative
-    flex items-center justify-center
-    w-14 h-14
-    rounded-full
-    transition-all duration-300
-"
->
-    <div className="flex items-center justify-center text-red-400">
-        <ArrowRightOnRectangleIcon className="w-5 h-5" />
-    </div>
-</Link>
+                            <Link
+                                href={route("logout")}
+                                method="post"
+                                as="button"
+                                className="relative flex items-center justify-center w-14 h-14 rounded-full transition-all duration-300"
+                            >
+                                <div className="flex items-center justify-center text-red-400">
+                                    <ArrowRightOnRectangleIcon className="w-5 h-5" />
+                                </div>
+                            </Link>
                         </div>
                     </div>
                 )}
