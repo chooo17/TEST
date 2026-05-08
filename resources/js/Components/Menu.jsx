@@ -93,14 +93,14 @@ export default function Menu({ onAdd, openCart, products = [], categories = [] }
                 onMouseUp={stopDrag}
                 onMouseLeave={stopDrag}
                 onMouseMove={handleMouseMove}
-                className="flex-1 overflow-y-auto px-3 pb-2 no-scrollbar cursor-grab active:cursor-grabbing overscroll-contain touch-pan-y"
+                className="flex-1 overflow-y-auto px-3 pb-2 no-scrollbar overscroll-contain touch-pan-y"
             >
-                <div className="grid py-2 grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3 min-w-0">
+                <div className="grid py-2 grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-3 min-w-0 touch-pan-y">
                     {filteredProducts.length > 0 ? (
                         filteredProducts.map((product) => (
                             <div
                                 key={product.id}
-                                className="bg-white/40 backdrop-blur-md rounded-2xl p-2 shadow-lg hover:scale-105 transition flex flex-col"
+                                className="bg-white/40 backdrop-blur-md rounded-2xl p-2 shadow-lg hover:scale-105 transition flex flex-col touch-pan-y"
                             >
                                 {/* IMAGE */}
                                 <div className="relative aspect-square flex items-center justify-center bg-gradient-to-br from-orange-300 to-orange-500 rounded-xl text-white text-2xl font-bold overflow-hidden">

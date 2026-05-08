@@ -1,4 +1,4 @@
-package com.warkop.pos;
+package com.werp.app;
 
 import com.getcapacitor.BridgeActivity;
 

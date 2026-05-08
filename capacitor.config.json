@@ -1,6 +1,6 @@
 {
-    "appId": "com.warkop.pos",
-    "appName": "Warkop POS",
+    "appId": "com.werp.app",
+    "appName": "WERP",
     "server": {
         "url": "https://test-production-3eea.up.railway.app",
         "cleartext": false
