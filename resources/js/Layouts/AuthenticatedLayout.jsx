@@ -131,7 +131,7 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                 </main>
 
                 {/* ── MOBILE BOTTOM NAV ─────────────────────────────── */}
-                {isMobile && (
+                {isMobile && !openCart && (
                     <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-50 md:hidden w-[88%] max-w-md">
                         <div className={`
                             h-16 flex items-center justify-around
