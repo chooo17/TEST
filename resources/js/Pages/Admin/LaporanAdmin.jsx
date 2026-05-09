@@ -546,7 +546,7 @@ function PaymentMix({ riwayat }) {
                             {data.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
                         </Pie>
                         <Tooltip contentStyle={{ background: "#1f2937", border: "none", borderRadius: 8, color: "#fff", fontSize: 12 }} />
-                        <Legend iconType="circle" iconSize={8} formatter={v => <span style={{ color: "#ffffff80", fontSize: 11 }}>{v}</span>} />
+                        <Legend iconType="circle" iconSize={8} formatter={v => <span className="text-gray-500 dark:text-white/50" style={{ fontSize: 11 }}>{v}</span>} />
                     </PieChart>
                 </ResponsiveContainer>
             </div>
@@ -571,7 +571,7 @@ function KalenderPenjualan({ kalenderData }) {
     const totalCells = Math.ceil((firstDay + daysInMonth) / 7) * 7;
 
     const getColor = (v) => {
-        if (!v) return "bg-white/5 text-white/20";
+        if (!v) return "bg-gray-100 dark:bg-white/5 text-gray-300 dark:text-white/20";
         if (v < 3) return "bg-orange-900/60 text-orange-200";
         if (v < 6) return "bg-orange-700/70 text-white";
         if (v < 10) return "bg-orange-500 text-white";
@@ -588,7 +588,7 @@ function KalenderPenjualan({ kalenderData }) {
                 <FireIcon className="w-5 h-5 text-orange-400" />
             </div>
             <div className="grid grid-cols-7 gap-1 mb-2">
-                {daysName.map(d => <div key={d} className="text-center text-[10px] text-white/30">{d}</div>)}
+                {daysName.map(d => <div key={d} className="text-center text-[10px] text-gray-400 dark:text-white/30">{d}</div>)}
             </div>
             <div className="grid grid-cols-7 gap-1">
                 {Array.from({ length: totalCells }).map((_, i) => {
@@ -606,10 +606,10 @@ function KalenderPenjualan({ kalenderData }) {
                     );
                 })}
             </div>
-            <div className="flex justify-between items-center mt-3 text-[10px] text-white/30">
+            <div className="flex justify-between items-center mt-3 text-[10px] text-gray-400 dark:text-white/30">
                 <span>Sedikit</span>
                 <div className="flex gap-1">
-                    {["bg-white/10","bg-orange-900/60","bg-orange-700/70","bg-orange-500","bg-orange-400"].map((c,i) => (
+                    {["bg-gray-200 dark:bg-white/10","bg-orange-900/60","bg-orange-700/70","bg-orange-500","bg-orange-400"].map((c,i) => (
                         <div key={i} className={`w-3 h-3 rounded ${c}`} />
                     ))}
                 </div>
@@ -637,7 +637,7 @@ function MostOrder({ orders }) {
                         <div className="flex justify-between items-center mb-1">
                             <div className="flex items-center gap-2">
                                 <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold
-                                    ${i === 0 ? "bg-amber-500 text-black" : i === 1 ? "bg-slate-400 text-black" : i === 2 ? "bg-orange-700 text-white" : "bg-white/10 text-white/50"}`}>
+                                    ${i === 0 ? "bg-amber-500 text-black" : i === 1 ? "bg-slate-400 text-black" : i === 2 ? "bg-orange-700 text-white" : "bg-gray-200 dark:bg-white/10 text-gray-500 dark:text-white/50"}`}>
                                     {i + 1}
                                 </span>
                                 <span className="text-sm font-medium truncate max-w-[140px]">{item.name}</span>
@@ -647,13 +647,13 @@ function MostOrder({ orders }) {
                                 <p className="text-[10px] text-gray-400 dark:text-white/40">{fmtShort(item.revenue)}</p>
                             </div>
                         </div>
-                        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-1.5 bg-gray-100 dark:bg-white/5 rounded-full overflow-hidden">
                             <div className="h-full bg-gradient-to-r from-orange-500 to-orange-400 rounded-full transition-all duration-700"
                                 style={{ width: `${(item.total / maxQty) * 100}%` }} />
                         </div>
                     </div>
                 )) : (
-                    <div className="text-center text-white/30 text-sm py-8">Belum ada data</div>
+                    <div className="text-center text-gray-400 dark:text-white/30 text-sm py-8">Belum ada data</div>
                 )}
             </div>
         </div>
@@ -682,7 +682,7 @@ function JamSibuk({ riwayat }) {
                 </div>
                 <div className="flex items-center gap-1.5 bg-orange-500/20 px-3 py-1 rounded-full">
                     <ClockIcon className="w-3.5 h-3.5 text-orange-400" />
-                    <span className="text-xs text-white-800 font-medium">{peak.jam}:00</span>
+                    <span className="text-xs text-orange-400 font-medium">{peak.jam}:00</span>
                 </div>
             </div>
             <div className="h-[120px]">
@@ -713,10 +713,10 @@ function RiwayatPesanan({ riwayat, onPrint }) {
     }), [riwayat, search, filterPayment]);
 
     const payColor = (m) => ({
-        Cash: "bg-orange-500/20 text-orange-300 border-orange-500/20",
-        QRIS: "bg-green-500/20 text-green-300 border-green-500/20",
-        Debit: "bg-blue-500/20 text-blue-300 border-blue-500/20",
-    }[m] || "bg-white/10 text-white/50 border-white/10");
+        Cash: "bg-orange-100 dark:bg-orange-500/20 text-orange-600 dark:text-orange-300 border-orange-200 dark:border-orange-500/20",
+        QRIS: "bg-green-100 dark:bg-green-500/20 text-green-600 dark:text-green-300 border-green-200 dark:border-green-500/20",
+        Debit: "bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-300 border-blue-200 dark:border-blue-500/20",
+    }[m] || "bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-white/50 border-gray-200 dark:border-white/10");
 
     return (
         <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-5 text-gray-900 dark:text-white flex flex-col" style={{ height: 480 }}>
@@ -728,7 +728,7 @@ function RiwayatPesanan({ riwayat, onPrint }) {
                 <div className="flex gap-1">
                     {payments.map(p => (
                         <button key={p} onClick={() => setFilterPayment(p)}
-                            className={`text-xs px-2 py-1 rounded-lg transition border ${filterPayment === p ? "bg-orange-500 border-orange-500 text-white font-semibold" : "border-white/10 text-white/40 hover:text-white"}`}>
+                            className={`text-xs px-2 py-1 rounded-lg transition border ${filterPayment === p ? "bg-orange-500 border-orange-500 text-white font-semibold" : "border-gray-200 dark:border-white/10 text-gray-500 dark:text-white/40 hover:text-gray-900 dark:hover:text-white"}`}>
                             {p}
                         </button>
                     ))}
@@ -736,12 +736,12 @@ function RiwayatPesanan({ riwayat, onPrint }) {
             </div>
             <input value={search} onChange={e => setSearch(e.target.value)}
                 placeholder="Cari no. invoice..."
-                className="w-full mb-3 px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 text-xs focus:outline-none focus:border-orange-500 transition" />
+                className="w-full mb-3 px-3 py-2 rounded-xl bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-white/30 text-xs focus:outline-none focus:border-orange-500 transition" />
 
             <div className="flex-1 overflow-y-auto space-y-2 pr-1" style={{ scrollbarWidth: "none" }}>
                 {filtered.length > 0 ? filtered.map(order => (
                     <div key={order.id} onClick={() => onPrint(order)}
-                        className="flex items-center gap-3 px-4 py-3 bg-white/3 hover:bg-white/8 border border-white/5 hover:border-orange-500/30 transition rounded-xl cursor-pointer group">
+                        className="flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-white/3 hover:bg-gray-100 dark:hover:bg-white/8 border border-gray-100 dark:border-white/5 hover:border-orange-300 dark:hover:border-orange-500/30 transition rounded-xl cursor-pointer group">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-xs font-bold flex-shrink-0">
                             {order.invoice_no.slice(-3)}
                         </div>
@@ -753,12 +753,12 @@ function RiwayatPesanan({ riwayat, onPrint }) {
                             <span className={`text-[10px] px-2 py-0.5 rounded-full border ${payColor(order.payment_method)}`}>
                                 {order.payment_method}
                             </span>
-                            <span className="text-sm font-bold text-orange-300">{fmtShort(order.grand_total)}</span>
-                            <PrinterIcon className="w-3.5 h-3.5 text-white/20 group-hover:text-orange-400 transition" />
+                            <span className="text-sm font-bold text-orange-500">{fmtShort(order.grand_total)}</span>
+                            <PrinterIcon className="w-3.5 h-3.5 text-gray-300 dark:text-white/20 group-hover:text-orange-400 transition" />
                         </div>
                     </div>
                 )) : (
-                    <div className="text-center text-white/30 text-sm py-12">Tidak ada transaksi</div>
+                    <div className="text-center text-gray-400 dark:text-white/30 text-sm py-12">Tidak ada transaksi</div>
                 )}
             </div>
         </div>
