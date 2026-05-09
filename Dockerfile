@@ -40,7 +40,7 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
 
 # Copy configs
 COPY docker/nginx/railway.conf /etc/nginx/conf.d/default.conf
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/nginx/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 80
 
