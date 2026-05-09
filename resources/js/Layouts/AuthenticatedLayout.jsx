@@ -106,22 +106,7 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                     </div>
                 )}
 
-                {/* DESKTOP DARK MODE TOGGLE */}
-                {!isMobile && (
-                    <div className="absolute top-3 right-4 z-30">
-                        <button onClick={toggle}
-                            className={`p-2 rounded-xl transition backdrop-blur-sm border
-                                ${isDark
-                                    ? "bg-gray-700/80 border-gray-600 hover:bg-gray-600"
-                                    : "bg-white/20 border-white/30 hover:bg-white/30"}`}>
-                            {isDark
-                                ? <SunIcon className="w-5 h-5 text-yellow-300" />
-                                : <MoonIcon className="w-5 h-5 text-white" />}
-                        </button>
-                    </div>
-                )}
-
-                {/* MAIN */}
+{/* MAIN */}
                 <main className={`flex-1 overflow-auto px-0 pt-1 ${isMobile ? "pb-20" : "pb-4"}`} style={{ touchAction: 'pan-y' }}>
                     <PageTransition keyProp={currentUrl}>
                         {children}

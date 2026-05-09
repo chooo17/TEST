@@ -1,6 +1,6 @@
 import { Link, usePage } from "@inertiajs/react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
-import LogoutButton from "@/Components/LogoutButton"; // ← tambahkan ini
+import LogoutButton from "@/Components/LogoutButton";
 import {
     HomeIcon,
     ShoppingCartIcon,
@@ -8,9 +8,13 @@ import {
     Cog6ToothIcon,
     ArrowRightOnRectangleIcon,
     Bars3Icon,
+    SunIcon,
+    MoonIcon,
 } from "@heroicons/react/24/solid";
+import { useDarkMode } from "@/hooks/useDarkMode";
 
-export default function Sidebar({ open, setOpen, isDark}) {
+export default function Sidebar({ open, setOpen, isDark }) {
+    const { toggle } = useDarkMode();
     const { auth } = usePage().props;
     const store = auth.store;
     const { url } = usePage();
@@ -116,8 +120,25 @@ export default function Sidebar({ open, setOpen, isDark}) {
                 })}
             </div>
 
+            {/* DARK MODE TOGGLE */}
+            <div className="px-2 mb-2">
+                <button
+                    onClick={toggle}
+                    className={`w-full flex items-center rounded-xl border transition-all duration-300
+                        ${isDark ? "bg-slate-800 border-slate-700 hover:bg-slate-700" : "bg-gray-50 border-gray-200 hover:bg-gray-100"}
+                        ${open ? "gap-3 px-3 py-2.5" : "justify-center p-2.5"}`}
+                >
+                    {isDark
+                        ? <SunIcon className="w-5 h-5 text-yellow-300 shrink-0" />
+                        : <MoonIcon className="w-5 h-5 text-gray-500 shrink-0" />}
+                    <span className={`text-sm font-medium whitespace-nowrap transition-all duration-300 ${open ? "opacity-100" : "opacity-0 w-0 overflow-hidden"} ${isDark ? "text-slate-300" : "text-gray-600"}`}>
+                        {isDark ? "Light Mode" : "Dark Mode"}
+                    </span>
+                </button>
+            </div>
+
            {/* FOOTER */}
-<div className="mt-4 px-2">
+<div className="mt-0 px-2">
     <div className={`flex items-center rounded-xl border transition-all duration-300
         ${isDark ? "bg-slate-800 border-slate-700" : "bg-gray-50 border-gray-200"}
         ${open ? "justify-between px-3 py-2" : "justify-center p-2"}`}

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+const EVENT = 'darkmode-change';
+
 export function useDarkMode() {
     const [isDark, setIsDark] = useState(() => {
         try { return localStorage.getItem('darkMode') === 'true'; }
@@ -13,6 +15,24 @@ export function useDarkMode() {
         localStorage.setItem('darkMode', isDark);
     }, [isDark]);
 
-    const toggle = () => setIsDark(prev => !prev);
+    // Sync all hook instances when any one toggles
+    useEffect(() => {
+        const handler = () => {
+            const val = localStorage.getItem('darkMode') === 'true';
+            setIsDark(val);
+        };
+        window.addEventListener(EVENT, handler);
+        return () => window.removeEventListener(EVENT, handler);
+    }, []);
+
+    const toggle = () => {
+        setIsDark(prev => {
+            const next = !prev;
+            localStorage.setItem('darkMode', next);
+            window.dispatchEvent(new Event(EVENT));
+            return next;
+        });
+    };
+
     return { isDark, toggle };
 }
