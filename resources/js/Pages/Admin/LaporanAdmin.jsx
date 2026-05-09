@@ -173,9 +173,9 @@ function BluetoothBar({ btState, onConnect, onDisconnect }) {
         <div className={`flex items-center gap-3 px-4 py-2 rounded-xl border text-xs font-medium transition-all ${
             btState.connected
                 ? "bg-green-500/10 border-green-500/30 text-green-400"
-                : "bg-white/5 border-white/10 text-white/40"
+                : "bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/40"
         }`}>
-            <SignalIcon className={`w-3.5 h-3.5 ${btState.connected ? "text-green-400" : "text-white/30"}`} />
+            <SignalIcon className={`w-3.5 h-3.5 ${btState.connected ? "text-green-400" : "text-gray-400 dark:text-white/30"}`} />
             {btState.connected ? (
                 <>
                     <span>Printer: <strong className="text-green-300">{btState.name}</strong></span>
@@ -385,10 +385,10 @@ function SummarySection({ summary, bulan }) {
         <div className="space-y-4">
             {/* Controls */}
             <div className="flex flex-wrap items-center gap-3">
-                <div className="flex bg-white/5 border border-white/10 rounded-xl p-1 gap-1">
+                <div className="flex bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-1 gap-1">
                     {[["bulan", "Per Bulan"], ["hari", "Per Hari"]].map(([v, l]) => (
                         <button key={v} onClick={() => setMode(v)}
-                            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-medium transition ${mode === v ? "bg-orange-500 text-white shadow-lg" : "text-white/50 hover:text-white"}`}>
+                            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-medium transition ${mode === v ? "bg-orange-500 text-white shadow-lg" : "text-gray-500 dark:text-white/50 hover:text-gray-900 dark:hover:text-white"}`}>
                             {v === "hari" && <CalendarDaysIcon className="w-3.5 h-3.5" />}
                             {l}
                         </button>
@@ -398,11 +398,11 @@ function SummarySection({ summary, bulan }) {
                     <div className="flex items-center gap-2">
                         <input type="date" value={tanggal} max={todayStr()}
                             onChange={e => { setTanggal(e.target.value); fetchHarian(e.target.value); }}
-                            className="bg-white/5 border border-white/10 text-white text-sm rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-orange-500 [color-scheme:dark]" />
+                            className="bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-gray-900 dark:text-white text-sm rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-orange-500 [color-scheme:dark]" />
                         {loading && <ArrowPathIcon className="w-4 h-4 text-orange-400 animate-spin" />}
                     </div>
                 )}
-                <span className="ml-auto text-sm text-white/30 font-medium">{label}</span>
+                <span className="ml-auto text-sm text-gray-400 dark:text-white/30 font-medium">{label}</span>
             </div>
 
             {error && <div className="px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm">{error}</div>}
@@ -424,16 +424,16 @@ function RevenueTrend({ chartData }) {
         })), [chartData]);
 
     return (
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 text-white">
+        <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-5 text-gray-900 dark:text-white">
             <div className="flex justify-between items-center mb-5">
                 <div>
                     <h3 className="font-semibold text-base">Tren Pendapatan</h3>
-                    <p className="text-xs text-white/40 mt-0.5">Harian bulan ini</p>
+                    <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">Harian bulan ini</p>
                 </div>
-                <div className="flex gap-1 bg-white/5 rounded-lg p-1">
+                <div className="flex gap-1 bg-gray-100 dark:bg-white/5 rounded-lg p-1">
                     {[["area", "Area"], ["bar", "Bar"]].map(([v, l]) => (
                         <button key={v} onClick={() => setView(v)}
-                            className={`px-3 py-1 rounded-md text-xs font-medium transition ${view === v ? "bg-orange-500 text-white" : "text-white/40 hover:text-white"}`}>
+                            className={`px-3 py-1 rounded-md text-xs font-medium transition ${view === v ? "bg-orange-500 text-white" : "text-gray-400 dark:text-white/40 hover:text-gray-900 dark:hover:text-white"}`}>
                             {l}
                         </button>
                     ))}
@@ -481,10 +481,10 @@ function PaymentMix({ riwayat }) {
     }, [riwayat]);
 
     return (
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 text-white">
+        <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-5 text-gray-900 dark:text-white">
             <div className="mb-4">
                 <h3 className="font-semibold text-base">Metode Pembayaran</h3>
-                <p className="text-xs text-white/40 mt-0.5">Distribusi transaksi</p>
+                <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">Distribusi transaksi</p>
             </div>
             <div className="h-[180px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -527,11 +527,11 @@ function KalenderPenjualan({ kalenderData }) {
     };
 
     return (
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 text-white">
+        <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-5 text-gray-900 dark:text-white">
             <div className="flex justify-between items-center mb-4">
                 <div>
                     <h3 className="font-semibold">Kalender Penjualan</h3>
-                    <p className="text-xs text-white/40 mt-0.5">{months[month]} {year}</p>
+                    <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">{months[month]} {year}</p>
                 </div>
                 <FireIcon className="w-5 h-5 text-orange-400" />
             </div>
@@ -571,11 +571,11 @@ function KalenderPenjualan({ kalenderData }) {
 function MostOrder({ orders }) {
     const maxQty = orders[0]?.total || 1;
     return (
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 text-white">
+        <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-5 text-gray-900 dark:text-white">
             <div className="flex justify-between items-center mb-5">
                 <div>
                     <h3 className="font-semibold">Produk Terlaris</h3>
-                    <p className="text-xs text-white/40 mt-0.5">Bulan ini</p>
+                    <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">Bulan ini</p>
                 </div>
                 <ChartBarIcon className="w-5 h-5 text-orange-400" />
             </div>
@@ -592,7 +592,7 @@ function MostOrder({ orders }) {
                             </div>
                             <div className="text-right">
                                 <p className="text-xs font-bold text-orange-400">{item.total}x</p>
-                                <p className="text-[10px] text-white/40">{fmtShort(item.revenue)}</p>
+                                <p className="text-[10px] text-gray-400 dark:text-white/40">{fmtShort(item.revenue)}</p>
                             </div>
                         </div>
                         <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
@@ -622,11 +622,11 @@ function JamSibuk({ riwayat }) {
     const peak = data.reduce((a, b) => a.count > b.count ? a : b, { jam: "-", count: 0 });
 
     return (
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 text-white">
+        <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-5 text-gray-900 dark:text-white">
             <div className="flex justify-between items-center mb-4">
                 <div>
                     <h3 className="font-semibold">Jam Tersibuk</h3>
-                    <p className="text-xs text-white/40 mt-0.5">Distribusi per jam</p>
+                    <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">Distribusi per jam</p>
                 </div>
                 <div className="flex items-center gap-1.5 bg-orange-500/20 px-3 py-1 rounded-full">
                     <ClockIcon className="w-3.5 h-3.5 text-orange-400" />
@@ -667,11 +667,11 @@ function RiwayatPesanan({ riwayat, onPrint }) {
     }[m] || "bg-white/10 text-white/50 border-white/10");
 
     return (
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 text-white flex flex-col" style={{ height: 480 }}>
+        <div className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl p-5 text-gray-900 dark:text-white flex flex-col" style={{ height: 480 }}>
             <div className="flex justify-between items-center mb-3">
                 <div>
                     <h3 className="font-semibold">Riwayat Transaksi</h3>
-                    <p className="text-xs text-white/40 mt-0.5">{filtered.length} transaksi</p>
+                    <p className="text-xs text-gray-400 dark:text-white/40 mt-0.5">{filtered.length} transaksi</p>
                 </div>
                 <div className="flex gap-1">
                     {payments.map(p => (
@@ -695,7 +695,7 @@ function RiwayatPesanan({ riwayat, onPrint }) {
                         </div>
                         <div className="flex-1 min-w-0">
                             <p className="text-sm font-semibold truncate">{order.invoice_no}</p>
-                            <p className="text-xs text-white/40">{order.sale_date} · {order.items_count} item</p>
+                            <p className="text-xs text-gray-400 dark:text-white/40">{order.sale_date} · {order.items_count} item</p>
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">
                             <span className={`text-[10px] px-2 py-0.5 rounded-full border ${payColor(order.payment_method)}`}>
@@ -759,14 +759,14 @@ export default function LaporanAdmin({
                 />
             )}
 
-            <div className="p-4 space-y-6 text-white">
+            <div className="p-4 space-y-6 text-gray-900 dark:text-white">
 
                 {/* ── Header ── */}
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                     <div>
                         <p className="text-xs text-orange-400 font-semibold uppercase tracking-widest mb-1">Point of Sales</p>
-                        <h1 className="text-3xl font-bold leading-tight">Laporan Penjualan</h1>
-                        <p className="text-white/40 text-sm mt-1">{bulan}</p>
+                        <h1 className="text-3xl font-bold leading-tight text-gray-900 dark:text-white">Laporan Penjualan</h1>
+                        <p className="text-gray-400 dark:text-white/40 text-sm mt-1">{bulan}</p>
                     </div>
                     <BluetoothBar btState={btState} onConnect={connectBT} onDisconnect={disconnectBT} />
                 </div>

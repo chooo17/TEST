@@ -24,22 +24,22 @@ function CustomSelect({ value, onChange, options, placeholder = "Pilih...", disa
         <div ref={ref} className="relative w-full">
             <button type="button" disabled={disabled}
                 onClick={() => !disabled && setOpen(!open)}
-                className={`w-full rounded-xl bg-white/20 border border-white/30 px-4 py-2.5 text-left
+                className={`w-full rounded-xl bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 px-4 py-2.5 text-left
                     flex items-center justify-between transition
-                    ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-white/30 cursor-pointer"}
-                    focus:outline-none focus:ring-2 focus:ring-white/50`}>
-                <span className={selected ? "text-white" : "text-white/50"}>
+                    ${disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-100 dark:hover:bg-slate-600 cursor-pointer"}
+                    focus:outline-none focus:ring-2 focus:ring-orange-300`}>
+                <span className={selected ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-slate-400"}>
                     {selected ? selected.label : placeholder}
                 </span>
-                <ChevronDownIcon className={`w-4 h-4 text-white/60 transition-transform ${open ? "rotate-180" : ""}`} />
+                <ChevronDownIcon className={`w-4 h-4 text-gray-400 dark:text-slate-400 transition-transform ${open ? "rotate-180" : ""}`} />
             </button>
             {open && (
-                <div className="absolute z-[60] mt-1 w-full rounded-xl bg-orange-900/90 backdrop-blur-xl border border-white/20 shadow-2xl max-h-60 overflow-y-auto overscroll-contain no-scrollbar">
+                <div className="absolute z-[60] mt-1 w-full rounded-xl bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 shadow-xl max-h-60 overflow-y-auto overscroll-contain no-scrollbar">
                     {options.map((opt) => (
                         <div key={opt.value}
                             onClick={() => { onChange(opt.value); setOpen(false); }}
                             className={`px-4 py-2.5 text-sm cursor-pointer transition
-                                ${String(value) === String(opt.value) ? "bg-white/20 text-white font-semibold" : "text-white/80 hover:bg-white/10"}`}>
+                                ${String(value) === String(opt.value) ? "bg-orange-50 dark:bg-slate-600 text-orange-600 dark:text-white font-semibold" : "text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600"}`}>
                             {opt.label}
                         </div>
                     ))}
@@ -72,7 +72,7 @@ function TabBtn({ active, onClick, icon: Icon, label }) {
     return (
         <button type="button" onClick={onClick}
             className={`w-full sm:w-auto flex items-center justify-center gap-2 px-2 sm:px-5 py-3 sm:py-2.5 rounded-xl font-semibold text-sm transition-all duration-200
-                ${active ? "bg-white text-orange-500 shadow-md" : "bg-white/20 text-white hover:bg-white/30"}`}>
+                ${active ? "bg-orange-500 text-white shadow-md" : "bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600"}`}>
             <Icon className="w-4 h-4" />{label}
         </button>
     );
@@ -80,8 +80,7 @@ function TabBtn({ active, onClick, icon: Icon, label }) {
 
 function GlassCard({ children, className = "" }) {
     return (
-        <div className={`bg-white/30 dark:bg-white/5 backdrop-blur-xl rounded-2xl 
-            border border-white/30 dark:border-white/10 shadow-lg ${className}`}>
+        <div className={`bg-white dark:bg-slate-800 rounded-2xl border border-gray-200 dark:border-slate-700 shadow-sm ${className}`}>
             {children}
         </div>
     );
@@ -91,19 +90,19 @@ function Modal({ show, onClose, title, subtitle, children, footer }) {
     if (!show) return null;
     return (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4">
-            <div className="w-full max-w-md bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/30 shadow-2xl overflow-visible text-white">
-                <div className="px-6 py-4 border-b border-white/20 flex justify-between items-center">
+            <div className="w-full max-w-md bg-white dark:bg-slate-800 rounded-3xl border border-gray-200 dark:border-slate-700 shadow-2xl overflow-visible">
+                <div className="px-6 py-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center">
                     <div>
-                        <h2 className="text-lg font-bold">{title}</h2>
-                        {subtitle && <p className="text-xs text-white/60">{subtitle}</p>}
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-white">{title}</h2>
+                        {subtitle && <p className="text-xs text-gray-500 dark:text-slate-400">{subtitle}</p>}
                     </div>
-                    <button onClick={onClose} className="hover:bg-white/20 p-1.5 rounded-lg transition">
+                    <button onClick={onClose} className="hover:bg-gray-100 dark:hover:bg-slate-700 p-1.5 rounded-lg transition text-gray-500 dark:text-slate-400">
                         <XMarkIcon className="w-5 h-5" />
                     </button>
                 </div>
                 <div className="p-6 space-y-3 overflow-visible">{children}</div>
                 {footer && (
-                    <div className="px-6 py-4 border-t border-white/20 bg-black/10 flex justify-end gap-3 rounded-b-3xl">
+                    <div className="px-6 py-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900/50 flex justify-end gap-3 rounded-b-3xl">
                         {footer}
                     </div>
                 )}
@@ -112,8 +111,8 @@ function Modal({ show, onClose, title, subtitle, children, footer }) {
     );
 }
 
-const inputCls = "w-full rounded-xl bg-white/20 border border-white/30 px-4 py-2.5 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 transition";
-const labelCls = "block text-xs font-semibold text-white/70 mb-1";
+const inputCls = "w-full rounded-xl bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 px-4 py-2.5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-300 dark:focus:ring-orange-500 transition";
+const labelCls = "block text-xs font-semibold text-gray-600 dark:text-slate-400 mb-1";
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function KelolaToko({ auth, products = [], categories = [], materials = [], users = [], store = null }) {
@@ -320,7 +319,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
 
                 {/* TOP BAR */}
                 <GlassCard className="px-5 py-3 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
-                    <h1 className="text-xl font-bold text-white">Kelola Toko</h1>
+                    <h1 className="text-xl font-bold text-gray-900 dark:text-white">Kelola Toko</h1>
                     <div className="
     grid grid-cols-3 gap-2 w-full
     sm:flex sm:flex-wrap sm:w-auto
@@ -349,7 +348,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
 
 </div>
                     <div className="flex items-center bg-white/20 rounded-full px-3 py-1.5 gap-2 w-full sm:w-64">
-                        <MagnifyingGlassIcon className="w-4 h-4 text-white/70 shrink-0" />
+                        <MagnifyingGlassIcon className="w-4 h-4 text-gray-400 dark:text-slate-400 shrink-0" />
                         <input placeholder="Cari..." value={search} onChange={(e) => setSearch(e.target.value)}
                             className="bg-transparent flex-1 text-orange-400 dark:text-white font-bold placeholder-white/90 text-sm outline-none focus:outline-none focus:ring-0 border-none" />
                     </div>
@@ -362,8 +361,8 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                         <GlassCard className="p-4 space-y-4">
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <h2 className="font-bold text-white text-lg">Master Menu</h2>
-                                    <p className="text-xs text-white/60">Daftar menu yang tersedia</p>
+                                    <h2 className="font-bold text-gray-900 dark:text-white text-lg">Master Menu</h2>
+                                    <p className="text-xs text-gray-500 dark:text-slate-400">Daftar menu yang tersedia</p>
                                 </div>
                                 <button type="button" onClick={openAddMenu}
                                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-orange-500 font-semibold text-sm hover:bg-orange-50 transition shadow">
@@ -387,7 +386,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                                 </div>
                                                 <p className="font-bold text-orange-600 dark:text-white text-sm">{formatRp(item.selling_price)}</p>
                                             </div>
-                                            <p className="text-xs text-orange-600/60 dark:text-white/50">Stok: {Math.floor(item.available_stock || 0)}</p>
+                                            <p className="text-xs text-orange-600/60 dark:text-gray-400 dark:text-slate-500">Stok: {Math.floor(item.available_stock || 0)}</p>
                                             <div className="flex gap-2 pt-1">
                                                 <button type="button" onClick={() => openRecipe(item)}
                                                     className="flex-1 flex items-center justify-center gap-1 py-1.5 rounded-lg bg-purple-500/40 text-purple-800 dark:text-white text-xs font-semibold hover:bg-purple-500/60 transition">
@@ -405,7 +404,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                         </div>
                                     </div>
                                 ))}
-                                {filteredProducts.length === 0 && <div className="col-span-full text-center py-12 text-white/50">Belum ada menu.</div>}
+                                {filteredProducts.length === 0 && <div className="col-span-full text-center py-12 text-gray-400 dark:text-slate-500">Belum ada menu.</div>}
                             </div>
                         </GlassCard>
                     )}
@@ -415,8 +414,8 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                         <GlassCard className="p-4 space-y-4">
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <h2 className="font-bold text-white text-lg">Master Bahan</h2>
-                                    <p className="text-xs text-white/60">Daftar bahan baku</p>
+                                    <h2 className="font-bold text-gray-900 dark:text-white text-lg">Master Bahan</h2>
+                                    <p className="text-xs text-gray-500 dark:text-slate-400">Daftar bahan baku</p>
                                 </div>
                                 <button type="button" onClick={openAddMaterial}
                                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-orange-500 font-semibold text-sm hover:bg-orange-50 transition shadow">
@@ -430,7 +429,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                             <div className="flex justify-between items-start">
                                                 <div>
                                                     <h3 className="font-semibold text-orange-600 dark:text-white">{item.name}</h3>
-                                                    <p className="text-xs text-orange-600/60 dark:text-white/50">Stok: {item.stock} {item.unit}</p>
+                                                    <p className="text-xs text-orange-600/60 dark:text-gray-400 dark:text-slate-500">Stok: {item.stock} {item.unit}</p>
                                                 </div>
                                                 <div className="flex flex-col items-end gap-1">
                                                     <span className="text-xs px-2 py-0.5 rounded-lg bg-orange-500/30 text-orange-800 dark:text-white">{item.unit}</span>
@@ -455,7 +454,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                                 <CustomSelect value={stockModes[item.id] || "in"} onChange={(v) => setStockModes((p) => ({ ...p, [item.id]: v }))} options={stockModeOptions} />
                                                 <input type="number" min="1" placeholder="Qty" value={qtyInputs[item.id] || ""}
                                                     onChange={(e) => setQtyInputs((p) => ({ ...p, [item.id]: e.target.value }))}
-                                                    className="px-2 py-2 rounded-xl bg-white/20 border border-white/30 text-white text-sm placeholder-white/40 focus:outline-none" />
+                                                    className="px-2 py-2 rounded-xl bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-900 dark:text-white text-sm placeholder-gray-400 focus:outline-none" />
                                                 <button type="button" onClick={() => adjustStock(item)}
                                                     className="py-2 rounded-xl bg-white text-orange-500 font-semibold text-sm hover:bg-orange-50 transition">Proses</button>
                                             </div>
@@ -469,7 +468,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                     ))}
                                 </div>
                             ) : (
-                                <div className="text-center py-12 text-white/50">Belum ada bahan.</div>
+                                <div className="text-center py-12 text-gray-400 dark:text-slate-500">Belum ada bahan.</div>
                             )}
                         </GlassCard>
                     )}
@@ -479,8 +478,8 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                         <GlassCard className="p-4 space-y-4">
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <h2 className="font-bold text-white text-lg">Master Pengguna</h2>
-                                    <p className="text-xs text-white/60">Daftar pengguna sistem</p>
+                                    <h2 className="font-bold text-gray-900 dark:text-white text-lg">Master Pengguna</h2>
+                                    <p className="text-xs text-gray-500 dark:text-slate-400">Daftar pengguna sistem</p>
                                 </div>
                                 <button type="button" onClick={openAddUser}
                                     className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-orange-500 font-semibold text-sm hover:bg-orange-50 transition shadow">
@@ -508,7 +507,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                         </div>
                                     </div>
                                 ))}
-                                {users.length === 0 && <div className="text-center py-12 text-white/50">Belum ada pengguna.</div>}
+                                {users.length === 0 && <div className="text-center py-12 text-gray-400 dark:text-slate-500">Belum ada pengguna.</div>}
                             </div>
                         </GlassCard>
                     )}
@@ -517,8 +516,8 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                     {tab === "toko" && (
                         <GlassCard className="p-6 max-w-lg mx-auto space-y-6">
                             <div>
-                                <h2 className="font-bold text-white text-lg">Profil Toko</h2>
-                                <p className="text-xs text-white/60">Update nama, logo, dan info toko</p>
+                                <h2 className="font-bold text-gray-900 dark:text-white text-lg">Profil Toko</h2>
+                                <p className="text-xs text-gray-500 dark:text-slate-400">Update nama, logo, dan info toko</p>
                             </div>
 
                             {/* LOGO UPLOAD */}
@@ -528,7 +527,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                         {logoPreview ? (
                                             <img src={logoPreview} alt="Logo" className="w-full h-full object-cover" />
                                         ) : (
-                                            <div className="flex flex-col items-center text-white/50">
+                                            <div className="flex flex-col items-center text-gray-400 dark:text-slate-500">
                                                 <BuildingStorefrontIcon className="w-10 h-10 mb-1" />
                                                 <p className="text-xs">No Logo</p>
                                             </div>
@@ -554,7 +553,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                         }
                                     }}
                                 />
-                                <p className="text-xs text-white/50">Klik ikon kamera untuk ganti logo (maks 2MB)</p>
+                                <p className="text-xs text-gray-400 dark:text-slate-500">Klik ikon kamera untuk ganti logo (maks 2MB)</p>
                             </div>
 
                             {/* FORM */}
@@ -589,11 +588,11 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                             <>
                                                 <img src={qrisPreview} alt="QRIS" className="w-full h-full object-contain p-2" />
                                                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition">
-                                                    <p className="text-white text-sm font-semibold">Ganti Gambar QRIS</p>
+                                                    <p className="text-gray-900 dark:text-white text-sm font-semibold">Ganti Gambar QRIS</p>
                                                 </div>
                                             </>
                                         ) : (
-                                            <div className="text-center text-white/50">
+                                            <div className="text-center text-gray-400 dark:text-slate-500">
                                                 <CameraIcon className="w-8 h-8 mx-auto mb-1" />
                                                 <p className="text-xs">Klik untuk upload gambar QRIS</p>
                                             </div>
@@ -609,7 +608,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                             }
                                         }}
                                     />
-                                    <p className="text-xs text-white/40 mt-1">Screenshot QRIS dari bank/e-wallet toko (maks 2MB)</p>
+                                    <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">Screenshot QRIS dari bank/e-wallet toko (maks 2MB)</p>
                                 </div>
 
                                 {/* Invite Code — read only */}
@@ -617,7 +616,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                     <div>
                                         <label className={labelCls}>Kode Undangan Toko</label>
                                         <div className="flex items-center gap-2">
-                                            <div className="flex-1 rounded-xl bg-white/10 border border-white/20 px-4 py-2.5 text-white font-mono font-bold tracking-widest text-center">
+                                            <div className="flex-1 rounded-xl bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 px-4 py-2.5 text-gray-900 dark:text-white font-mono font-bold tracking-widest text-center">
                                                 {store.invite_code}
                                             </div>
                                             <button type="button"
@@ -626,7 +625,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                                 Salin
                                             </button>
                                         </div>
-                                        <p className="text-xs text-white/40 mt-1">Bagikan kode ini kepada karyawan untuk bergabung</p>
+                                        <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">Bagikan kode ini kepada karyawan untuk bergabung</p>
                                     </div>
                                 )}
                             </div>
@@ -645,7 +644,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
             <Modal show={showMenuModal} onClose={() => setShowMenuModal(false)}
                 title="Tambah Menu" subtitle="Tambahkan produk baru ke daftar menu"
                 footer={<>
-                    <button onClick={() => setShowMenuModal(false)} className="px-5 py-2 rounded-xl bg-white/20 text-white hover:bg-white/30 transition text-sm">Batal</button>
+                    <button onClick={() => setShowMenuModal(false)} className="px-5 py-2 rounded-xl bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition text-sm">Batal</button>
                     <button onClick={saveMenu} className="px-5 py-2 rounded-xl bg-white text-orange-500 font-semibold hover:bg-orange-50 transition text-sm">Simpan</button>
                 </>}>
                 <div><label className={labelCls}>Nama Menu</label>
@@ -660,7 +659,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
             <Modal show={showEditMenuModal} onClose={() => { setShowEditMenuModal(false); setImagePreview(null); }}
                 title="Edit Menu" subtitle={`Edit produk: ${editingProduct?.name}`}
                 footer={<>
-                    <button onClick={() => { setShowEditMenuModal(false); setImagePreview(null); }} className="px-5 py-2 rounded-xl bg-white/20 text-white hover:bg-white/30 transition text-sm">Batal</button>
+                    <button onClick={() => { setShowEditMenuModal(false); setImagePreview(null); }} className="px-5 py-2 rounded-xl bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition text-sm">Batal</button>
                     <button onClick={saveEditMenu} className="px-5 py-2 rounded-xl bg-white text-orange-500 font-semibold hover:bg-orange-50 transition text-sm">Simpan</button>
                 </>}>
                 <div>
@@ -670,10 +669,10 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                         {imagePreview ? (
                             <><img src={imagePreview} alt="preview" className="w-full h-full object-cover" />
                                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition">
-                                    <p className="text-white text-sm font-semibold">Ganti Foto</p>
+                                    <p className="text-gray-900 dark:text-white text-sm font-semibold">Ganti Foto</p>
                                 </div></>
                         ) : (
-                            <div className="text-center text-white/50">
+                            <div className="text-center text-gray-400 dark:text-slate-500">
                                 <CameraIcon className="w-8 h-8 mx-auto mb-1" />
                                 <p className="text-xs">Klik untuk upload foto</p>
                             </div>
@@ -701,7 +700,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
             <Modal show={showMaterialModal} onClose={() => setShowMaterialModal(false)}
                 title={editingMaterial ? "Edit Bahan" : "Tambah Bahan"} subtitle="Kelola bahan baku inventory"
                 footer={<>
-                    <button onClick={() => setShowMaterialModal(false)} className="px-5 py-2 rounded-xl bg-white/20 text-white hover:bg-white/30 transition text-sm">Batal</button>
+                    <button onClick={() => setShowMaterialModal(false)} className="px-5 py-2 rounded-xl bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition text-sm">Batal</button>
                     <button onClick={saveMaterial} className="px-5 py-2 rounded-xl bg-white text-orange-500 font-semibold hover:bg-orange-50 transition text-sm">Simpan</button>
                 </>}>
                 <div>
@@ -719,7 +718,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                     <div>
                         <label className={labelCls}>{editingMaterial ? "Stok" : "Stok Awal"}</label>
                         <input type="number" value={data.stock} onChange={(e) => setData("stock", e.target.value)} placeholder="0" className={inputCls} />
-                        {!editingMaterial && <p className="text-white/40 text-xs mt-1">Otomatis jadi kuantitas awal</p>}
+                        {!editingMaterial && <p className="text-gray-400 dark:text-slate-500 text-xs mt-1">Otomatis jadi kuantitas awal</p>}
                     </div>
                     <div><label className={labelCls}>Min Stok</label>
                         <input type="number" value={data.min_stock} onChange={(e) => setData("min_stock", e.target.value)} placeholder="0" className={inputCls} /></div>
@@ -732,7 +731,7 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
             <Modal show={showUserModal} onClose={() => setShowUserModal(false)}
                 title={editingUser ? "Edit Pengguna" : "Tambah Pengguna"} subtitle="Kelola pengguna sistem"
                 footer={<>
-                    <button onClick={() => setShowUserModal(false)} className="px-5 py-2 rounded-xl bg-white/20 text-white hover:bg-white/30 transition text-sm">Batal</button>
+                    <button onClick={() => setShowUserModal(false)} className="px-5 py-2 rounded-xl bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition text-sm">Batal</button>
                     <button onClick={saveUser} className="px-5 py-2 rounded-xl bg-white text-orange-500 font-semibold hover:bg-orange-50 transition text-sm">Simpan</button>
                 </>}>
                 <div><label className={labelCls}>Nama Lengkap</label>
@@ -752,10 +751,10 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
             {/* MODAL RESEP */}
             {showRecipeModal && (
                 <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center px-4">
-                    <div className="w-full max-w-xl bg-white/10 backdrop-blur-2xl rounded-3xl border border-white/30 shadow-2xl text-white overflow-visible">
+                    <div className="w-full max-w-xl bg-white dark:bg-slate-800 rounded-3xl border border-gray-200 dark:border-slate-700 shadow-2xl overflow-visible">
                         <div className="px-6 py-4 border-b border-white/20 flex justify-between items-center">
                             <div><h2 className="text-lg font-bold">Atur Resep</h2>
-                                <p className="text-xs text-white/60">{selectedProduct?.name}</p></div>
+                                <p className="text-xs text-gray-500 dark:text-slate-400">{selectedProduct?.name}</p></div>
                             <button onClick={() => setShowRecipeModal(false)} className="hover:bg-white/20 p-1.5 rounded-lg transition">
                                 <XMarkIcon className="w-5 h-5" /></button>
                         </div>
@@ -772,8 +771,8 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                         <div className="col-span-2">
                                             <input type="number" placeholder="Qty" value={row.qty === 0 ? "" : row.qty}
                                                 onChange={(e) => { const u = [...recipeItems]; u[index].qty = e.target.value; setRecipeItems(u); }}
-                                                className="w-full px-3 py-2.5 rounded-xl bg-white/20 border border-white/30 text-white text-sm focus:outline-none placeholder-white/40" /></div>
-                                        <div className="col-span-1 text-xs text-white/60 font-semibold">{mat?.unit || ""}</div>
+                                                className="w-full px-3 py-2.5 rounded-xl bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-900 dark:text-white text-sm focus:outline-none placeholder-gray-400" /></div>
+                                        <div className="col-span-1 text-xs text-gray-500 dark:text-slate-400 font-semibold">{mat?.unit || ""}</div>
                                         <div className="col-span-3">
                                             <div className="px-3 py-2.5 rounded-xl bg-white/10 border border-white/10 text-cyan-300 font-semibold text-xs">
                                                 {formatRp(Math.round(cost))}</div></div>
@@ -784,14 +783,14 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                 );
                             })}
                             <button type="button" onClick={() => setRecipeItems([...recipeItems, { material_id: "", qty: "" }])}
-                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/20 text-white text-sm hover:bg-white/30 transition">
+                                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 text-sm hover:bg-gray-200 dark:hover:bg-slate-600 transition">
                                 <PlusIcon className="w-4 h-4" /> Tambah Bahan</button>
                             <div className="border-t border-white/20 pt-3 flex justify-between items-center">
-                                <span className="text-white/60 text-sm">Total HPP</span>
+                                <span className="text-gray-500 dark:text-slate-400 text-sm">Total HPP</span>
                                 <span className="text-xl font-bold text-orange-300">{formatRp(Math.round(recipeTotalHPP))}</span></div>
                         </div>
                         <div className="px-6 py-4 border-t border-white/20 bg-black/10 flex justify-end gap-3 rounded-b-3xl">
-                            <button onClick={() => setShowRecipeModal(false)} className="px-5 py-2 rounded-xl bg-white/20 text-white hover:bg-white/30 transition text-sm">Batal</button>
+                            <button onClick={() => setShowRecipeModal(false)} className="px-5 py-2 rounded-xl bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition text-sm">Batal</button>
                             <button onClick={saveRecipe} className="px-5 py-2 rounded-xl bg-white text-orange-500 font-semibold hover:bg-orange-50 transition text-sm">Simpan</button>
                         </div>
                     </div>

@@ -334,7 +334,7 @@ export default function Cart({ cart, open, setOpen, setCart, qrisImage = null, i
     // ──────────────────────────────────────────────────────────────
     return (
         <>
-            <div className={`fixed top-0 right-0 h-full z-50 transition-all duration-300 ease-in-out ${open ? "w-[320px]" : "w-0"}`}>
+            <div className={`fixed top-0 right-0 h-full z-50 transition-all duration-300 ease-in-out ${open ? "w-[320px]" : "w-0 pointer-events-none"}`}>
                 {open && (
                     <div
                         style={{ transform: `translateX(${dragX}px)` }}
