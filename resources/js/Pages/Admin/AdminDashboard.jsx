@@ -30,9 +30,9 @@ function StatCard({ icon: Icon, label, value, growth, sub }) {
                 </div>
                 <GrowthBadge value={growth} />
             </div>
-            <div>
+            <div className="min-w-0">
                 <p className="text-gray-500 dark:text-slate-400 text-xs">{label}</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+                <p className="text-base font-bold text-gray-900 dark:text-white break-all leading-tight">{value}</p>
                 {sub && <p className="text-gray-400 dark:text-slate-500 text-xs mt-0.5">{sub}</p>}
             </div>
         </div>
