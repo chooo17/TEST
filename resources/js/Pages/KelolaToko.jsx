@@ -49,6 +49,73 @@ function CustomSelect({ value, onChange, options, placeholder = "Pilih...", disa
     );
 }
 
+// ─── Inline Category Select ───────────────────────────────────────────────────
+function InlineCategorySelect({ value, onChange, categories, onCategoryCreated, showNotif }) {
+    const [addingNew, setAddingNew] = useState(false);
+    const [newName, setNewName] = useState("");
+    const [saving, setSaving] = useState(false);
+    const inputRef = useRef();
+
+    useEffect(() => {
+        if (addingNew && inputRef.current) inputRef.current.focus();
+    }, [addingNew]);
+
+    const handleCreate = () => {
+        if (!newName.trim()) return;
+        setSaving(true);
+        router.post("/categories", { name: newName.trim() }, {
+            preserveScroll: true,
+            onSuccess: (page) => {
+                // categories prop updated via Inertia — pick the newest one by name
+                const created = page.props.categories?.find(c => c.name === newName.trim())
+                    ?? page.props.categories?.at(-1);
+                if (created) {
+                    onChange(created.id);
+                    onCategoryCreated(created);
+                }
+                setNewName("");
+                setAddingNew(false);
+                showNotif("success", `Kategori "${newName.trim()}" ditambahkan!`);
+            },
+            onError: () => showNotif("error", "Gagal menambah kategori."),
+            onFinish: () => setSaving(false),
+        });
+    };
+
+    const options = [{ value: "", label: "Pilih Kategori" }, ...categories.map(c => ({ value: c.id, label: c.name }))];
+
+    return (
+        <div className="space-y-2">
+            <CustomSelect value={value} onChange={onChange} options={options} placeholder="Pilih Kategori" />
+            {!addingNew ? (
+                <button type="button" onClick={() => setAddingNew(true)}
+                    className="flex items-center gap-1 text-xs text-orange-500 hover:text-orange-600 font-medium transition">
+                    <PlusIcon className="w-3.5 h-3.5" /> Tambah kategori baru
+                </button>
+            ) : (
+                <div className="flex gap-2 items-center">
+                    <input
+                        ref={inputRef}
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === "Enter") handleCreate(); if (e.key === "Escape") setAddingNew(false); }}
+                        placeholder="Nama kategori baru..."
+                        className="flex-1 rounded-xl bg-gray-50 dark:bg-slate-700 border border-orange-300 dark:border-orange-500 px-3 py-2 text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-300"
+                    />
+                    <button type="button" onClick={handleCreate} disabled={!newName.trim() || saving}
+                        className="px-3 py-2 rounded-xl bg-orange-500 text-white text-xs font-semibold hover:bg-orange-600 transition disabled:opacity-50">
+                        {saving ? "..." : "Simpan"}
+                    </button>
+                    <button type="button" onClick={() => { setAddingNew(false); setNewName(""); }}
+                        className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition">
+                        <XMarkIcon className="w-4 h-4 text-gray-400" />
+                    </button>
+                </div>
+            )}
+        </div>
+    );
+}
+
 // ─── Notification ─────────────────────────────────────────────────────────────
 function Notification({ notif }) {
     if (!notif) return null;
@@ -119,6 +186,14 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
     const [tab, setTab] = useState("menu");
     const [search, setSearch] = useState("");
     const [notif, setNotif] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
+    // Category management state
+    const [showCategoryModal, setShowCategoryModal] = useState(false);
+    const [editingCategory, setEditingCategory] = useState(null);
+    const [categoryName, setCategoryName] = useState("");
+    const [categoryLoading, setCategoryLoading] = useState(false);
+
     const [showMenuModal, setShowMenuModal] = useState(false);
     const [showMaterialModal, setShowMaterialModal] = useState(false);
     const [showUserModal, setShowUserModal] = useState(false);
@@ -160,12 +235,60 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
     });
 
     const filteredProducts = useMemo(() =>
-        products.filter((i) => (i.name || "").toLowerCase().includes(search.toLowerCase())),
-        [products, search]);
+        products.filter((i) => {
+            const matchSearch = (i.name || "").toLowerCase().includes(search.toLowerCase());
+            const matchCat = selectedCategory === null || i.category_id === selectedCategory;
+            return matchSearch && matchCat;
+        }),
+        [products, search, selectedCategory]);
 
     const filteredMaterials = useMemo(() =>
         materials.filter((i) => (i.name || "").toLowerCase().includes(search.toLowerCase())),
         [materials, search]);
+
+    const openAddCategory = () => {
+        setEditingCategory(null);
+        setCategoryName("");
+        setShowCategoryModal(true);
+    };
+
+    const openEditCategory = (cat) => {
+        setEditingCategory(cat);
+        setCategoryName(cat.name);
+        setShowCategoryModal(true);
+    };
+
+    const saveCategory = () => {
+        if (!categoryName.trim()) return;
+        setCategoryLoading(true);
+        if (editingCategory) {
+            router.put(`/categories/${editingCategory.id}`, { name: categoryName }, {
+                preserveScroll: true,
+                onSuccess: () => { setShowCategoryModal(false); showNotif("success", "Kategori diperbarui!"); },
+                onError: () => showNotif("error", "Gagal memperbarui kategori."),
+                onFinish: () => setCategoryLoading(false),
+            });
+        } else {
+            router.post("/categories", { name: categoryName }, {
+                preserveScroll: true,
+                onSuccess: () => { setShowCategoryModal(false); showNotif("success", "Kategori ditambahkan!"); },
+                onError: () => showNotif("error", "Gagal menambah kategori."),
+                onFinish: () => setCategoryLoading(false),
+            });
+        }
+    };
+
+    const deleteCategory = (cat) => {
+        if (!confirm(`Hapus kategori "${cat.name}"?`)) return;
+        router.delete(`/categories/${cat.id}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+                if (selectedCategory === cat.id) setSelectedCategory(null);
+                showNotif("success", "Kategori dihapus!");
+            },
+            onError: (errors) => showNotif("error", errors?.message || "Kategori masih digunakan produk."),
+        });
+    };
 
     const getInitials = (name = "") => name.split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2);
     const formatRp = (v) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(v || 0);
@@ -369,6 +492,38 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                                     <PlusIcon className="w-4 h-4" /> Tambah Menu
                                 </button>
                             </div>
+
+                            {/* CATEGORY PILLS */}
+                            <div className="flex items-center gap-2 flex-wrap">
+                                <button
+                                    onClick={() => setSelectedCategory(null)}
+                                    className={`px-4 py-1.5 rounded-xl text-sm font-medium border transition ${selectedCategory === null ? "bg-orange-500 text-white border-orange-500" : "bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 border-gray-200 dark:border-slate-600 hover:bg-orange-50"}`}>
+                                    Semua
+                                </button>
+                                {categories.map((cat) => (
+                                    <div key={cat.id} className="flex items-center gap-1">
+                                        <button
+                                            onClick={() => setSelectedCategory(selectedCategory === cat.id ? null : cat.id)}
+                                            className={`px-4 py-1.5 rounded-xl text-sm font-medium border transition ${selectedCategory === cat.id ? "bg-orange-500 text-white border-orange-500" : "bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 border-gray-200 dark:border-slate-600 hover:bg-orange-50"}`}>
+                                            {cat.name}
+                                            <span className="ml-1.5 text-xs opacity-60">({cat.products_count})</span>
+                                        </button>
+                                        <button onClick={() => openEditCategory(cat)}
+                                            className="p-1 rounded-lg text-gray-400 hover:text-blue-500 transition">
+                                            <PencilSquareIcon className="w-3.5 h-3.5" />
+                                        </button>
+                                        <button onClick={() => deleteCategory(cat)}
+                                            className="p-1 rounded-lg text-gray-400 hover:text-red-500 transition">
+                                            <TrashIcon className="w-3.5 h-3.5" />
+                                        </button>
+                                    </div>
+                                ))}
+                                <button onClick={openAddCategory}
+                                    className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-sm font-medium border border-dashed border-orange-300 text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-500/10 transition">
+                                    <PlusIcon className="w-3.5 h-3.5" /> Kategori
+                                </button>
+                            </div>
+
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
                                 {filteredProducts.map((item) => (
                                     <div key={item.id} className="bg-white/20 backdrop-blur-md rounded-2xl overflow-hidden border border-white/20 hover:scale-[1.02] transition-all duration-200 shadow">
@@ -649,8 +804,16 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                 </>}>
                 <div><label className={labelCls}>Nama Menu</label>
                     <input placeholder="Contoh: Americano" className={inputCls} onChange={(e) => setData("name", e.target.value)} /></div>
-                <div><label className={labelCls}>Kategori</label>
-                    <CustomSelect value={data.category_id} onChange={(v) => setData("category_id", v)} options={categoryOptions} placeholder="Pilih Kategori" /></div>
+                <div>
+                    <label className={labelCls}>Kategori</label>
+                    <InlineCategorySelect
+                        value={data.category_id}
+                        onChange={(v) => setData("category_id", v)}
+                        categories={categories}
+                        onCategoryCreated={(newCat) => setData("category_id", newCat.id)}
+                        showNotif={showNotif}
+                    />
+                </div>
                 <div><label className={labelCls}>Harga Jual</label>
                     <input type="number" placeholder="0" className={inputCls} onChange={(e) => setData("selling_price", e.target.value)} /></div>
             </Modal>
@@ -690,8 +853,16 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                 </div>
                 <div><label className={labelCls}>Nama Menu</label>
                     <input value={data.name} onChange={(e) => setData("name", e.target.value)} placeholder="Nama Menu" className={inputCls} /></div>
-                <div><label className={labelCls}>Kategori</label>
-                    <CustomSelect value={data.category_id} onChange={(v) => setData("category_id", v)} options={categoryOptions} placeholder="Pilih Kategori" /></div>
+                <div>
+                    <label className={labelCls}>Kategori</label>
+                    <InlineCategorySelect
+                        value={data.category_id}
+                        onChange={(v) => setData("category_id", v)}
+                        categories={categories}
+                        onCategoryCreated={(newCat) => setData("category_id", newCat.id)}
+                        showNotif={showNotif}
+                    />
+                </div>
                 <div><label className={labelCls}>Harga Jual</label>
                     <input type="number" value={data.selling_price} onChange={(e) => setData("selling_price", e.target.value)} placeholder="0" className={inputCls} /></div>
             </Modal>
@@ -792,6 +963,44 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                         <div className="px-6 py-4 border-t border-white/20 bg-black/10 flex justify-end gap-3 rounded-b-3xl">
                             <button onClick={() => setShowRecipeModal(false)} className="px-5 py-2 rounded-xl bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-200 dark:hover:bg-slate-600 transition text-sm">Batal</button>
                             <button onClick={saveRecipe} className="px-5 py-2 rounded-xl bg-white text-orange-500 font-semibold hover:bg-orange-50 transition text-sm">Simpan</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ── CATEGORY MODAL ──────────────────────────────────────── */}
+            {showCategoryModal && (
+                <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6 space-y-4">
+                        <div className="flex justify-between items-center">
+                            <h3 className="font-bold text-gray-900 dark:text-white text-lg">
+                                {editingCategory ? "Edit Kategori" : "Tambah Kategori"}
+                            </h3>
+                            <button onClick={() => setShowCategoryModal(false)}
+                                className="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition">
+                                <XMarkIcon className="w-5 h-5 text-gray-400" />
+                            </button>
+                        </div>
+                        <div>
+                            <label className={labelCls}>Nama Kategori</label>
+                            <input
+                                autoFocus
+                                value={categoryName}
+                                onChange={(e) => setCategoryName(e.target.value)}
+                                onKeyDown={(e) => e.key === "Enter" && saveCategory()}
+                                placeholder="Contoh: Minuman, Makanan, Snack..."
+                                className={inputCls}
+                            />
+                        </div>
+                        <div className="flex justify-end gap-2 pt-1">
+                            <button onClick={() => setShowCategoryModal(false)}
+                                className="px-4 py-2 rounded-xl bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-300 text-sm hover:bg-gray-200 dark:hover:bg-slate-600 transition">
+                                Batal
+                            </button>
+                            <button onClick={saveCategory} disabled={!categoryName.trim() || categoryLoading}
+                                className="px-4 py-2 rounded-xl bg-orange-500 text-white font-semibold text-sm hover:bg-orange-600 transition disabled:opacity-50">
+                                {categoryLoading ? "Menyimpan..." : "Simpan"}
+                            </button>
                         </div>
                     </div>
                 </div>

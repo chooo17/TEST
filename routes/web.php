@@ -63,6 +63,9 @@ Route::middleware(['auth', 'role:superadmin|user|admin'])->group(function () {
 Route::middleware(['auth', 'role:superadmin|admin'])->group(function () {
     Route::get('/kelolatoko', [KelolaTokoController::class, 'index'])
         ->name('kelolatoko');
+    Route::post('/categories', [KelolaTokoController::class, 'storeCategory'])->name('categories.store');
+    Route::put('/categories/{category}', [KelolaTokoController::class, 'updateCategory'])->name('categories.update');
+    Route::delete('/categories/{category}', [KelolaTokoController::class, 'destroyCategory'])->name('categories.destroy');
 });
 
 Route::middleware(['auth', 'role:admin|superadmin'])->group(function () {
