@@ -115,7 +115,7 @@ class LaporanController extends Controller
 
         // Riwayat
         $riwayat = (clone $base())
-            ->with('items.product:id,name')
+            ->with('items.product:id,name', 'user:id,name', 'store:id,name,address,phone')
             ->orderByDesc('sale_date')
             ->limit(50)
             ->get()
@@ -126,7 +126,13 @@ class LaporanController extends Controller
                     ? Carbon::parse($sale->sale_date)->timezone('Asia/Jakarta')->format('d/m/Y H:i')
                     : '-',
                 'grand_total'    => (float) $sale->grand_total,
+                'paid_amount'    => (float) $sale->paid_amount,
+                'change_amount'  => (float) $sale->change_amount,
                 'payment_method' => $sale->payment_method,
+                'kasir_name'     => $sale->user->name ?? '-',
+                'store_name'     => $sale->store->name ?? null,
+                'store_address'  => $sale->store->address ?? null,
+                'store_phone'    => $sale->store->phone ?? null,
                 'items_count'    => $sale->items->sum('qty'),
                 'items'          => $sale->items->map(fn($item) => [
                     'name'     => $item->product->name ?? '-',

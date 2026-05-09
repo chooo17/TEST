@@ -208,11 +208,58 @@ function NotaModal({ sale, onClose, btState, onConnect }) {
     const [printing, setPrinting] = useState(false);
 
     const handleBrowserPrint = () => {
+        const fmtCur = (v) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(v || 0);
+        const itemsHtml = (sale.items ?? []).map(item => `
+            <div class="item">
+                <div class="item-name">${item.name}</div>
+                <div class="item-detail"><span>${item.qty}x ${fmtCur(item.price)}</span><span>${fmtCur(item.subtotal)}</span></div>
+            </div>`).join("");
+        const cashRows = sale.payment_method !== "QRIS" && sale.paid_amount > 0 ? `
+            <div class="row"><span>Tunai</span><span>${fmtCur(sale.paid_amount)}</span></div>
+            <div class="row"><span>Kembali</span><span>${fmtCur(sale.change_amount)}</span></div>` : "";
+        const html = `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"/>
+        <title>Nota ${sale.invoice_no}</title>
+        <style>
+          body{font-family:monospace;width:300px;margin:0 auto;padding:10px;color:#000}
+          .center{text-align:center}.store-name{font-size:18px;font-weight:bold;margin-bottom:4px}
+          .store-sub{font-size:11px;margin-bottom:8px;line-height:1.5}
+          .divider{border-top:1px dashed #000;margin:8px 0}
+          .item{margin-bottom:8px}.item-name{font-weight:bold;font-size:13px}
+          .item-detail{display:flex;justify-content:space-between;font-size:12px}
+          .total-section{font-size:13px}.row{display:flex;justify-content:space-between;margin-bottom:4px}
+          .grand-total{font-size:15px;font-weight:bold}
+          .info{font-size:11px;line-height:1.7}
+          .footer{text-align:center;margin-top:14px;font-size:11px}
+          @media print{body{width:100%}}
+        </style></head><body>
+        <div class="center">
+          <div class="store-name">${sale.store_name ?? "Toko"}</div>
+          ${sale.store_address ? `<div class="store-sub">${sale.store_address}${sale.store_phone ? '<br>' + sale.store_phone : ''}</div>` : ""}
+        </div>
+        <div class="divider"></div>
+        <div class="info">
+          <div>No. Transaksi : ${sale.invoice_no}</div>
+          <div>Tanggal       : ${sale.sale_date}</div>
+          <div>Kasir         : ${sale.kasir_name ?? "-"}</div>
+          <div>Pembayaran    : ${sale.payment_method}</div>
+        </div>
+        <div class="divider"></div>
+        ${itemsHtml}
+        <div class="divider"></div>
+        <div class="total-section">
+          <div class="row grand-total"><span>TOTAL</span><span>${fmtCur(sale.grand_total)}</span></div>
+          ${cashRows}
+        </div>
+        <div class="divider"></div>
+        <div class="footer">
+          <div>Terima kasih telah berkunjung!</div>
+          <div style="margin-top:8px;font-size:13px;font-weight:bold;letter-spacing:2px;">WERP</div>
+        </div>
+        <script>window.onload=()=>{window.print();window.onafterprint=()=>window.close();}<\/script>
+        </body></html>`;
         const w = window.open("", "_blank", "width=400,height=600");
-        w.document.write(`<html><head><title>Nota</title>
-        <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Courier New',monospace;font-size:12px;padding:16px;color:#000}.divider{border-top:1px dashed #000;margin:8px 0}.row{display:flex;justify-content:space-between;margin:3px 0}.center{text-align:center}.bold{font-weight:bold}.big{font-size:16px}</style>
-        </head><body>${printRef.current.innerHTML}</body></html>`);
-        w.document.close(); w.focus(); w.print(); w.close();
+        w.document.write(html);
+        w.document.close();
     };
 
     const handleBTPrint = async () => {
@@ -275,15 +322,16 @@ function NotaModal({ sale, onClose, btState, onConnect }) {
 
                 {/* Nota */}
                 <div ref={printRef} className="p-5 font-mono text-sm text-white bg-[#1a1a1a]">
-                    <div className="text-center font-bold text-lg mb-0.5">WARKOP POS</div>
-                    <div className="text-center text-xs text-white/40 mb-3">Nota Pembelian</div>
+                    <div className="text-center font-bold text-lg mb-0.5">{sale.store_name ?? "Toko"}</div>
+                    {sale.store_address && <div className="text-center text-xs text-white/40">{sale.store_address}</div>}
+                    {sale.store_phone && <div className="text-center text-xs text-white/40 mb-3">{sale.store_phone}</div>}
                     <div className="border-t border-dashed border-white/20 my-2" />
-                    {[["No. Invoice", sale.invoice_no], ["Tanggal", sale.sale_date], ["Pembayaran", sale.payment_method]].map(([k, v]) => (
+                    {[["No. Transaksi", sale.invoice_no], ["Tanggal", sale.sale_date], ["Kasir", sale.kasir_name], ["Pembayaran", sale.payment_method]].map(([k, v]) => v ? (
                         <div key={k} className="flex justify-between text-xs py-0.5">
                             <span className="text-white/50">{k}</span>
                             <span className="font-semibold">{v}</span>
                         </div>
-                    ))}
+                    ) : null)}
                     <div className="border-t border-dashed border-white/20 my-2" />
                     {sale.items?.map((item, i) => (
                         <div key={i} className="mb-1.5">
@@ -306,7 +354,9 @@ function NotaModal({ sale, onClose, btState, onConnect }) {
                             <span>Kembali</span><span>{fmt(sale.change_amount)}</span>
                         </div>
                     </>}
-                    <div className="text-center text-xs text-white/30 mt-4">Terima kasih sudah berkunjung 🙏</div>
+                    <div className="border-t border-dashed border-white/20 my-2 mt-4" />
+                    <div className="text-center text-xs text-white/30">Terima kasih telah berkunjung!</div>
+                    <div className="text-center text-sm font-bold tracking-widest text-white/50 mt-1">WERP</div>
                 </div>
             </div>
         </div>

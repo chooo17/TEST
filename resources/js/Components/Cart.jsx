@@ -119,7 +119,10 @@ function buildReceiptHTML({ store, kasirName, invoiceNo, saleDate, items, total,
     ${cashRows}
   </div>
   <div class="divider"></div>
-  <div class="footer">Terima kasih telah berkunjung 🙏</div>
+  <div class="footer">
+    <div>Terima kasih telah berkunjung!</div>
+    <div style="margin-top:8px;font-size:13px;font-weight:bold;letter-spacing:2px;">WERP</div>
+  </div>
   <script>window.onload = () => { window.print(); window.onafterprint = () => window.close(); }</script>
 </body>
 </html>`;
