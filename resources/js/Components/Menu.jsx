@@ -2,7 +2,10 @@ import { useState, useMemo } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import ListCategoryMenu from "@/Components/ListCategoryMenu";
 
+import { useDarkMode } from "@/hooks/useDarkMode";
+
 export default function Menu({ onAdd, openCart, products = [], categories = [] }) {
+    const { isDark } = useDarkMode();
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [search, setSearch] = useState("");
 
@@ -36,16 +39,16 @@ export default function Menu({ onAdd, openCart, products = [], categories = [] }
     };
 
     return (
-        <div className="w-full bg-white/30 backdrop-blur-xl rounded-2xl px-1 py-1 border border-white/20 h-full min-h-0 flex flex-col">
+        <div className={`w-full rounded-2xl px-1 py-1 border h-full min-h-0 flex flex-col ${isDark ? "bg-slate-800 border-slate-700" : "bg-white border-gray-200 shadow-sm"}`}>
             {/* HEADER */}
             <div className="flex px-2 justify-between items-center mb-2">
-                <h2 className="text-xl font-bold text-white">Semua menu</h2>
-                <div className="flex items-center bg-white/30 rounded-full px-2 py-1">
+                <h2 className={`text-xl font-bold ${isDark ? "text-white" : "text-gray-900"}`}>Semua menu</h2>
+                <div className={`flex items-center rounded-full px-2 py-1 ${isDark ? "bg-slate-700" : "bg-gray-100"}`}>
                     <input
                         placeholder="Search menu..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="bg-transparent w-full text-orange-400 font-semibold placeholder-orange-400 border-0 outline-none focus:ring-0 focus:outline-none"
+                        className={`bg-transparent w-full font-semibold border-0 outline-none focus:ring-0 focus:outline-none ${isDark ? "text-white placeholder-slate-400" : "text-gray-700 placeholder-gray-400"}`}
                     />
                     <MagnifyingGlassIcon className="w-6 h-6 text-orange-500 drop-shadow-sm" />
                 </div>
@@ -67,7 +70,7 @@ export default function Menu({ onAdd, openCart, products = [], categories = [] }
                         filteredProducts.map((product) => (
                             <div
                                 key={product.id}
-                                className="bg-white/40 backdrop-blur-md rounded-2xl p-2 shadow-lg hover:scale-105 transition flex flex-col"
+                                className={`rounded-2xl p-2 shadow-sm hover:scale-105 transition flex flex-col border ${isDark ? "bg-slate-700 border-slate-600" : "bg-white border-gray-100"}`}
                                 style={{ touchAction: 'pan-y' }}
                             >
                                 {/* IMAGE */}
@@ -92,7 +95,7 @@ export default function Menu({ onAdd, openCart, products = [], categories = [] }
 
                                 {/* INFO — nama dan harga stacked vertikal */}
                                 <div className="mt-1.5 flex-1 space-y-0.5 px-0.5">
-                                    <p className="text-xs text-black font-semibold line-clamp-2 leading-tight">
+                                    <p className={`text-xs font-semibold line-clamp-2 leading-tight ${isDark ? "text-white" : "text-gray-900"}`}>
                                         {product.name}
                                     </p>
                                     <p className="text-orange-600 font-bold text-xs leading-tight">

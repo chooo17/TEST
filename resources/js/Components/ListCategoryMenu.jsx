@@ -1,10 +1,9 @@
 import { useRef, useState, useEffect } from "react";
-import {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-} from "@heroicons/react/24/solid";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import { useDarkMode } from "@/hooks/useDarkMode";
 
 export default function ListCategoryMenu({ categories, selectedCategory, onSelectCategory }) {
+    const { isDark } = useDarkMode();
     const scrollRef = useRef();
 
     const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -65,28 +64,18 @@ export default function ListCategoryMenu({ categories, selectedCategory, onSelec
         <div className="relative w-fit max-w-full">
             {/* LEFT BUTTON */}
             {canScrollLeft && (
-                <button
-                    onClick={() => scroll("left")}
-                    className="
-                    absolute left-2 top-1/2 -translate-y-1/2 z-10
-                    bg-white/30 backdrop-blur-md border border-white/30 
-                    hover:bg-white/50 text-orange-500 p-2 rounded-full shadow
-                "
-                >
+                <button onClick={() => scroll("left")}
+                    className={`absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full shadow border text-orange-500 transition
+                        ${isDark ? "bg-slate-700 border-slate-600 hover:bg-slate-600" : "bg-white border-gray-200 hover:bg-gray-50"}`}>
                     <ChevronLeftIcon className="w-5 h-5" />
                 </button>
             )}
 
             {/* RIGHT BUTTON */}
             {canScrollRight && (
-                <button
-                    onClick={() => scroll("right")}
-                    className="
-                    absolute right-2 top-1/2 -translate-y-1/2 z-10
-                    bg-white/30 backdrop-blur-md border border-white/30 
-                    hover:bg-white/50 text-orange-500 p-2 rounded-full shadow
-                "
-                >
+                <button onClick={() => scroll("right")}
+                    className={`absolute right-2 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full shadow border text-orange-500 transition
+                        ${isDark ? "bg-slate-700 border-slate-600 hover:bg-slate-600" : "bg-white border-gray-200 hover:bg-gray-50"}`}>
                     <ChevronRightIcon className="w-5 h-5" />
                 </button>
             )}
@@ -107,18 +96,10 @@ export default function ListCategoryMenu({ categories, selectedCategory, onSelec
             >
                 <button
                     onClick={() => onSelectCategory(null)}
-                    className={`
-                    min-w-[120px] flex-shrink-0
-                    backdrop-blur-md 
-                    border border-white/40
-                    text-white px-6 py-2 rounded-xl shadow
-                    transition text-sm font-medium
-                    ${
-                        selectedCategory === null
-                            ? "bg-orange-500"
-                            : "bg-orange-400/70 hover:bg-orange-500"
-                    }
-                `}
+                    className={`min-w-[100px] flex-shrink-0 px-5 py-2 rounded-xl shadow-sm transition text-sm font-medium border
+                        ${selectedCategory === null
+                            ? "bg-orange-500 text-white border-orange-500"
+                            : isDark ? "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600" : "bg-gray-100 text-gray-600 border-gray-200 hover:bg-orange-50 hover:text-orange-600"}`}
                 >
                     Semua
                 </button>
@@ -126,18 +107,10 @@ export default function ListCategoryMenu({ categories, selectedCategory, onSelec
                     <button
                         key={i}
                         onClick={() => onSelectCategory(cat.id)}
-                        className={`
-                        min-w-[120px] flex-shrink-0
-                        backdrop-blur-md 
-                        border border-white/40
-                        text-white px-6 py-2 rounded-xl shadow
-                        transition text-sm font-medium
-                        ${
-                            selectedCategory === cat.id
-                                ? "bg-orange-500"
-                                : "bg-orange-400/70 hover:bg-orange-500"
-                        }
-                    `}
+                        className={`min-w-[100px] flex-shrink-0 px-5 py-2 rounded-xl shadow-sm transition text-sm font-medium border
+                            ${selectedCategory === cat.id
+                                ? "bg-orange-500 text-white border-orange-500"
+                                : isDark ? "bg-slate-700 text-slate-300 border-slate-600 hover:bg-slate-600" : "bg-gray-100 text-gray-600 border-gray-200 hover:bg-orange-50 hover:text-orange-600"}`}
                     >
                         {cat.name}
                     </button>

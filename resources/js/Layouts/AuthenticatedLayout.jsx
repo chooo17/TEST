@@ -65,7 +65,7 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
 
     return (
         <div className={`h-screen flex transition-colors duration-300 overflow-hidden
-            ${isDark ? "bg-slate-950" : "bg-gradient-to-br from-orange-400 via-orange-300 to-orange-200"}`}>
+            ${isDark ? "bg-slate-900" : "bg-gray-50"}`}>
 
             {/* ── DESKTOP SIDEBAR ──────────────────────────────────── */}
             {!isMobile && (
@@ -83,18 +83,18 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                 {/* MOBILE TOP BAR */}
                 {isMobile && (
                     <div className={`flex items-center justify-between px-4 py-3 shrink-0
-                        ${isDark ? "bg-slate-900/80" : "bg-white/10"} backdrop-blur-sm border-b border-white/10`}>
+                        ${isDark ? "bg-slate-900 border-b border-slate-700" : "bg-white border-b border-gray-200"}`}>
                         <div className="flex items-center">
-                            <span className="text-white font-bold text-lg">
+                            <span className={`font-bold text-lg ${isDark ? "text-white" : "text-gray-900"}`}>
                                 {auth?.store?.name ?? "Warkop POS"}
                             </span>
                         </div>
 
                         <button onClick={toggle}
-                            className="p-2 rounded-xl bg-white/20 hover:bg-white/30 text-white transition">
+                            className={`p-2 rounded-xl transition ${isDark ? "bg-slate-700 hover:bg-slate-600" : "bg-gray-100 hover:bg-gray-200"}`}>
                             {isDark
                                 ? <SunIcon className="w-5 h-5 text-yellow-300" />
-                                : <MoonIcon className="w-5 h-5 text-white" />}
+                                : <MoonIcon className="w-5 h-5 text-gray-600" />}
                         </button>
                     </div>
                 )}
@@ -135,11 +135,11 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                     <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-50 md:hidden w-[88%] max-w-md">
                         <div className={`
                             h-16 flex items-center justify-around
-                            rounded-[26px] px-2 py-2 border backdrop-blur-2xl
+                            rounded-[26px] px-2 py-2 border
                             transition-all duration-300
                             ${isDark
-                                ? "bg-slate-900/90 border-slate-700"
-                                : "bg-white/80 border-orange-100"}
+                                ? "bg-slate-900 border-slate-700"
+                                : "bg-white border-gray-200 shadow-lg"}
                         `}>
                             {bottomNavItems.map((item, i) => {
                                 const active = isActive(item.link);
@@ -159,7 +159,7 @@ export default function AuthenticatedLayout({ header, children, openCart, hideSe
                                             flex items-center justify-center transition-all duration-300
                                             ${active
                                                 ? "text-orange-500"
-                                                : isDark ? "text-slate-400" : "text-orange-400"}
+                                                : isDark ? "text-slate-400" : "text-gray-400"}
                                         `}>
                                             <item.icon className="w-5 h-5" />
                                         </div>

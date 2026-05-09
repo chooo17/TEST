@@ -178,16 +178,16 @@ export default function Cart({ cart, open, setOpen, setCart, qrisImage = null, i
 
                 {/* FULL-SCREEN MODAL */}
                 {open && (
-                    <div className="fixed inset-0 z-50 flex flex-col bg-gradient-to-b from-orange-400 to-orange-500 text-white">
+                    <div className="fixed inset-0 z-50 flex flex-col bg-white dark:bg-slate-900 text-gray-900 dark:text-white">
                         {/* HEADER */}
-                        <div className="px-5 py-4 flex justify-between items-center border-b border-white/20 shrink-0">
+                        <div className="px-5 py-4 flex justify-between items-center border-b border-gray-200 dark:border-slate-700 shrink-0">
                             <div>
                                 <h2 className="font-bold text-lg">Pesanan</h2>
-                                {orderId && <p className="text-xs text-white/70">{orderId}</p>}
+                                {orderId && <p className="text-xs text-gray-400 dark:text-slate-400">{orderId}</p>}
                             </div>
                             <button
                                 onClick={() => setOpen(false)}
-                                className="p-2 rounded-xl bg-white/20 hover:bg-white/30 transition"
+                                className="p-2 rounded-xl bg-gray-100 dark:bg-slate-700 hover:bg-gray-200 dark:hover:bg-slate-600 transition"
                             >
                                 <XMarkIcon className="w-5 h-5" />
                             </button>
@@ -196,42 +196,42 @@ export default function Cart({ cart, open, setOpen, setCart, qrisImage = null, i
                         {/* ITEM LIST */}
                         <div className="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar">
                             {cart.map((item, i) => (
-                                <div key={i} className="bg-white/20 rounded-2xl p-3 space-y-2">
+                                <div key={i} className="bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl p-3 space-y-2">
                                     <div className="flex justify-between">
-                                        <span className="font-semibold text-sm">{item.name}</span>
-                                        <button onClick={() => removeItem(i)} className="text-xs text-red-200 hover:text-red-400">Hapus</button>
+                                        <span className="font-semibold text-sm text-gray-900 dark:text-white">{item.name}</span>
+                                        <button onClick={() => removeItem(i)} className="text-xs text-red-400 hover:text-red-600">Hapus</button>
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <div className="flex gap-2 items-center">
-                                            <button onClick={() => decreaseQty(i)} className="bg-white/30 w-8 h-8 rounded-xl font-bold text-lg">-</button>
+                                            <button onClick={() => decreaseQty(i)} className="bg-gray-200 dark:bg-slate-600 w-8 h-8 rounded-xl font-bold text-lg text-gray-700 dark:text-white">-</button>
                                             <span className="w-6 text-center font-semibold">{item.qty}</span>
-                                            <button onClick={() => increaseQty(i)} className="bg-white/30 w-8 h-8 rounded-xl font-bold text-lg">+</button>
+                                            <button onClick={() => increaseQty(i)} className="bg-gray-200 dark:bg-slate-600 w-8 h-8 rounded-xl font-bold text-lg text-gray-700 dark:text-white">+</button>
                                         </div>
-                                        <span className="font-bold text-sm">{formatCurrency(item.price * item.qty)}</span>
+                                        <span className="font-bold text-sm text-orange-500">{formatCurrency(item.price * item.qty)}</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
                         {/* FOOTER */}
-                        <div className="p-4 border-t border-white/20 space-y-3 shrink-0">
-                            <p className="text-sm font-semibold">Metode Pembayaran</p>
+                        <div className="p-4 border-t border-gray-200 dark:border-slate-700 space-y-3 shrink-0 bg-gray-50 dark:bg-slate-900/80">
+                            <p className="text-sm font-semibold text-gray-700 dark:text-slate-300">Metode Pembayaran</p>
                             <div className="flex gap-2">
                                 {["Cash", "QRIS", "Debit"].map((method) => (
                                     <button key={method} onClick={() => setPayment(method)}
-                                        className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition ${payment === method ? "bg-white text-orange-500" : "bg-white/20 hover:bg-white/30"}`}>
+                                        className={`flex-1 py-2.5 rounded-xl text-sm font-semibold transition border ${payment === method ? "bg-orange-500 text-white border-orange-500" : "bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-300 border-gray-200 dark:border-slate-600"}`}>
                                         {method}
                                     </button>
                                 ))}
                             </div>
-                            <div className="flex justify-between font-bold text-xl">
+                            <div className="flex justify-between font-bold text-xl text-gray-900 dark:text-white">
                                 <span>Total</span>
-                                <span>{formatCurrency(total)}</span>
+                                <span className="text-orange-500">{formatCurrency(total)}</span>
                             </div>
                             <button
                                 onClick={() => setShowPaymentModal(true)}
                                 disabled={cart.length === 0 || processing}
-                                className="w-full bg-white text-orange-500 py-4 rounded-2xl font-bold text-lg hover:bg-orange-50 transition disabled:opacity-50 shadow-lg"
+                                className="w-full bg-orange-500 text-white py-4 rounded-2xl font-bold text-lg hover:bg-orange-600 transition disabled:opacity-50 shadow-lg"
                             >
                                 {processing ? "Memproses..." : "Bayar Sekarang"}
                             </button>
@@ -338,18 +338,18 @@ export default function Cart({ cart, open, setOpen, setCart, qrisImage = null, i
                 {open && (
                     <div
                         style={{ transform: `translateX(${dragX}px)` }}
-                        className="h-full w-full flex flex-col bg-gradient-to-b from-orange-400 to-orange-500 text-white rounded-l-3xl shadow-2xl border-l border-white/20 backdrop-blur-xl overflow-hidden"
+                        className="h-full w-full flex flex-col bg-white dark:bg-slate-800 text-gray-900 dark:text-white rounded-l-3xl shadow-xl border-l border-gray-200 dark:border-slate-700 overflow-hidden"
                         onTouchStart={handleTouchStart}
                         onTouchMove={handleTouchMove}
                         onTouchEnd={handleTouchEnd}
                     >
                         {/* HEADER */}
-                        <div className="p-4 border-b border-white/20 flex justify-between items-center">
+                        <div className="p-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center">
                             <div>
                                 <h2 className="font-bold text-lg">Cart</h2>
-                                {orderId && <p className="text-xs text-white/70">{orderId}</p>}
+                                {orderId && <p className="text-xs text-gray-400 dark:text-slate-400">{orderId}</p>}
                             </div>
-                            <button onClick={() => setOpen(false)} className="hover:bg-white/20 px-2 py-1 rounded-lg">✕</button>
+                            <button onClick={() => setOpen(false)} className="hover:bg-gray-100 dark:hover:bg-slate-700 px-2 py-1 rounded-lg transition">✕</button>
                         </div>
 
                         {/* LIST */}
@@ -361,44 +361,44 @@ export default function Cart({ cart, open, setOpen, setCart, qrisImage = null, i
                             onMouseLeave={stopDrag}
                             className="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar"
                         >
-                            {cart.length === 0 && <p className="text-white/70 text-sm">Belum ada pesanan</p>}
+                            {cart.length === 0 && <p className="text-gray-400 dark:text-slate-500 text-sm">Belum ada pesanan</p>}
                             {cart.map((item, i) => (
-                                <div key={i} className="bg-white/20 rounded-2xl p-3 space-y-2">
+                                <div key={i} className="bg-gray-50 dark:bg-slate-700 border border-gray-100 dark:border-slate-600 rounded-2xl p-3 space-y-2">
                                     <div className="flex justify-between">
-                                        <span className="font-semibold text-sm">{item.name}</span>
-                                        <button onClick={() => removeItem(i)} className="text-xs text-red-200 hover:text-red-400">Hapus</button>
+                                        <span className="font-semibold text-sm text-gray-900 dark:text-white">{item.name}</span>
+                                        <button onClick={() => removeItem(i)} className="text-xs text-red-400 hover:text-red-600">Hapus</button>
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <div className="flex gap-2 items-center">
-                                            <button onClick={() => decreaseQty(i)} className="bg-white/30 px-2 rounded">-</button>
-                                            <span>{item.qty}</span>
-                                            <button onClick={() => increaseQty(i)} className="bg-white/30 px-2 rounded">+</button>
+                                            <button onClick={() => decreaseQty(i)} className="bg-gray-200 dark:bg-slate-600 w-7 h-7 rounded-lg font-bold text-gray-700 dark:text-white">-</button>
+                                            <span className="text-gray-900 dark:text-white">{item.qty}</span>
+                                            <button onClick={() => increaseQty(i)} className="bg-gray-200 dark:bg-slate-600 w-7 h-7 rounded-lg font-bold text-gray-700 dark:text-white">+</button>
                                         </div>
-                                        <span className="font-bold text-sm">{formatCurrency(item.price * item.qty)}</span>
+                                        <span className="font-bold text-sm text-orange-500">{formatCurrency(item.price * item.qty)}</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
                         {/* FOOTER */}
-                        <div className="p-4 border-t border-white/20 space-y-3">
+                        <div className="p-4 border-t border-gray-200 dark:border-slate-700 space-y-3 bg-gray-50 dark:bg-slate-900/50">
                             <div className="space-y-2">
-                                <p className="text-sm font-semibold">Metode Pembayaran</p>
+                                <p className="text-sm font-semibold text-gray-700 dark:text-slate-300">Metode Pembayaran</p>
                                 <div className="flex gap-2">
                                     {["Cash", "QRIS", "Debit"].map((method) => (
                                         <button key={method} onClick={() => setPayment(method)}
-                                            className={`flex-1 py-2 rounded-lg text-xs font-semibold transition ${payment === method ? "bg-white text-orange-500" : "bg-white/20 hover:bg-white/30"}`}>
+                                            className={`flex-1 py-2 rounded-lg text-xs font-semibold transition border ${payment === method ? "bg-orange-500 text-white border-orange-500" : "bg-white dark:bg-slate-700 text-gray-600 dark:text-slate-300 border-gray-200 dark:border-slate-600 hover:border-orange-300"}`}>
                                             {method}
                                         </button>
                                     ))}
                                 </div>
                             </div>
-                            <div className="flex justify-between font-bold text-lg">
+                            <div className="flex justify-between font-bold text-lg text-gray-900 dark:text-white">
                                 <span>Total</span>
-                                <span>{formatCurrency(total)}</span>
+                                <span className="text-orange-500">{formatCurrency(total)}</span>
                             </div>
                             <button onClick={() => setShowPaymentModal(true)} disabled={cart.length === 0 || processing}
-                                className="w-full bg-white text-orange-500 py-3 rounded-xl font-semibold hover:bg-orange-100 transition disabled:opacity-50">
+                                className="w-full bg-orange-500 text-white py-3 rounded-xl font-semibold hover:bg-orange-600 transition disabled:opacity-50">
                                 {processing ? "Memproses..." : "Bayar"}
                             </button>
                         </div>
