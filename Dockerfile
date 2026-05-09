@@ -39,6 +39,7 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # Copy configs
+RUN rm -f /etc/nginx/sites-enabled/default
 COPY docker/nginx/railway.conf /etc/nginx/conf.d/default.conf
 COPY docker/nginx/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
