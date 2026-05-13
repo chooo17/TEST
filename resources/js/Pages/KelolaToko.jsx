@@ -5,7 +5,7 @@ import {
     PencilSquareIcon, TrashIcon, BeakerIcon, UserGroupIcon,
     ShoppingBagIcon, CubeIcon, PlusIcon, XMarkIcon,
     MagnifyingGlassIcon, CheckCircleIcon, ExclamationCircleIcon,
-    ChevronDownIcon, BuildingStorefrontIcon, CameraIcon,
+    ChevronDownIcon, CameraIcon,
 } from "@heroicons/react/24/solid";
 
 // ─── Custom Select ────────────────────────────────────────────────────────────
@@ -182,7 +182,7 @@ const inputCls = "w-full rounded-xl bg-gray-50 dark:bg-slate-700 border border-g
 const labelCls = "block text-xs font-semibold text-gray-600 dark:text-slate-400 mb-1";
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
-export default function KelolaToko({ auth, products = [], categories = [], materials = [], users = [], store = null }) {
+export default function KelolaToko({ auth, products = [], categories = [], materials = [], users = [] }) {
     const [tab, setTab] = useState("menu");
     const [search, setSearch] = useState("");
     const [notif, setNotif] = useState(null);
@@ -203,8 +203,6 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
     const [editingUser, setEditingUser] = useState(null);
     const [editingProduct, setEditingProduct] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
-    const [logoPreview, setLogoPreview] = useState(store?.logo ? `/storage/${store.logo}` : null);
-    const [qrisPreview, setQrisPreview] = useState(store?.qris_image ? `/storage/${store.qris_image}` : null);
     const [qtyInputs, setQtyInputs] = useState({});
     const [stockModes, setStockModes] = useState({});
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -223,15 +221,6 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
         is_active: 1, min_stock: 0, buy_price: 0, qty: 0,
         initial_qty: 0, use_initial_qty: false,
         email: "", password: "", role: "",
-    });
-
-    // Store form
-    const storeForm = useForm({
-        name: store?.name ?? "",
-        address: store?.address ?? "",
-        phone: store?.phone ?? "",
-        logo: null,
-        qris_image: null,
     });
 
     const filteredProducts = useMemo(() =>
@@ -423,16 +412,6 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
         return total;
     }, 0);
 
-    // ── Store Profile ─────────────────────────────────────────────────────────
-    const saveStore = () => {
-        storeForm.post('/store/update', {
-            forceFormData: true,
-            preserveScroll: true,
-            onSuccess: () => showNotif("success", "Profil toko berhasil diupdate!"),
-            onError: () => showNotif("error", "Gagal mengupdate profil toko."),
-        });
-    };
-
     return (
         <AuthenticatedLayout hideSearch>
             <Head title="Kelola Toko" />
@@ -462,12 +441,6 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
         label="Bahan"
     />
 
-    <TabBtn
-        active={tab === "toko"}
-        onClick={() => setTab("toko")}
-        icon={BuildingStorefrontIcon}
-        label="Toko"
-    />
 
 </div>
                     <div className="flex items-center bg-white/20 rounded-full px-3 py-1.5 gap-2 w-full sm:w-64">
@@ -667,131 +640,6 @@ export default function KelolaToko({ auth, products = [], categories = [], mater
                         </GlassCard>
                     )}
 
-                    {/* ── PROFIL TOKO TAB ────────────────────────────────────── */}
-                    {tab === "toko" && (
-                        <GlassCard className="p-6 max-w-lg mx-auto space-y-6">
-                            <div>
-                                <h2 className="font-bold text-gray-900 dark:text-white text-lg">Profil Toko</h2>
-                                <p className="text-xs text-gray-500 dark:text-slate-400">Update nama, logo, dan info toko</p>
-                            </div>
-
-                            {/* LOGO UPLOAD */}
-                            <div className="flex flex-col items-center gap-4">
-                                <div className="relative">
-                                    <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-white/30 bg-white/20 flex items-center justify-center">
-                                        {logoPreview ? (
-                                            <img src={logoPreview} alt="Logo" className="w-full h-full object-cover" />
-                                        ) : (
-                                            <div className="flex flex-col items-center text-gray-400 dark:text-slate-500">
-                                                <BuildingStorefrontIcon className="w-10 h-10 mb-1" />
-                                                <p className="text-xs">No Logo</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                    {/* Camera button */}
-                                    <button type="button"
-                                        onClick={() => document.getElementById('logo-input').click()}
-                                        className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-white text-orange-500 flex items-center justify-center shadow-lg hover:bg-orange-50 transition">
-                                        <CameraIcon className="w-4 h-4" />
-                                    </button>
-                                </div>
-                                <input id="logo-input" type="file" accept="image/*" className="hidden"
-                                    onChange={(e) => {
-                                        const file = e.target.files[0];
-                                        if (file) {
-                                            if (file.size > 2 * 1024 * 1024) {
-                                                showNotif("error", "Ukuran logo maksimal 2MB!");
-                                                return;
-                                            }
-                                            storeForm.setData("logo", file);
-                                            setLogoPreview(URL.createObjectURL(file));
-                                        }
-                                    }}
-                                />
-                                <p className="text-xs text-gray-400 dark:text-slate-500">Klik ikon kamera untuk ganti logo (maks 2MB)</p>
-                            </div>
-
-                            {/* FORM */}
-                            <div className="space-y-4">
-                                <div>
-                                    <label className={labelCls}>Nama Toko</label>
-                                    <input value={storeForm.data.name}
-                                        onChange={(e) => storeForm.setData("name", e.target.value)}
-                                        placeholder="Nama toko" className={inputCls} />
-                                </div>
-                                <div>
-                                    <label className={labelCls}>Alamat</label>
-                                    <input value={storeForm.data.address}
-                                        onChange={(e) => storeForm.setData("address", e.target.value)}
-                                        placeholder="Alamat toko" className={inputCls} />
-                                </div>
-                                <div>
-                                    <label className={labelCls}>No. Telepon</label>
-                                    <input value={storeForm.data.phone}
-                                        onChange={(e) => storeForm.setData("phone", e.target.value)}
-                                        placeholder="08xxxxxxxxxx" className={inputCls} />
-                                </div>
-
-                                {/* QRIS Image Upload */}
-                                <div>
-                                    <label className={labelCls}>Gambar QRIS Toko</label>
-                                    <div
-                                        className="relative w-full h-48 rounded-xl overflow-hidden border border-white/30 bg-white/10 flex items-center justify-center cursor-pointer hover:bg-white/20 transition"
-                                        onClick={() => document.getElementById('qris-input').click()}
-                                    >
-                                        {qrisPreview ? (
-                                            <>
-                                                <img src={qrisPreview} alt="QRIS" className="w-full h-full object-contain p-2" />
-                                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition">
-                                                    <p className="text-gray-900 dark:text-white text-sm font-semibold">Ganti Gambar QRIS</p>
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <div className="text-center text-gray-400 dark:text-slate-500">
-                                                <CameraIcon className="w-8 h-8 mx-auto mb-1" />
-                                                <p className="text-xs">Klik untuk upload gambar QRIS</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <input id="qris-input" type="file" accept="image/*" className="hidden"
-                                        onChange={(e) => {
-                                            const file = e.target.files[0];
-                                            if (file) {
-                                                if (file.size > 2 * 1024 * 1024) { showNotif("error", "Ukuran gambar QRIS maksimal 2MB!"); return; }
-                                                storeForm.setData("qris_image", file);
-                                                setQrisPreview(URL.createObjectURL(file));
-                                            }
-                                        }}
-                                    />
-                                    <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">Screenshot QRIS dari bank/e-wallet toko (maks 2MB)</p>
-                                </div>
-
-                                {/* Invite Code — read only */}
-                                {store?.invite_code && (
-                                    <div>
-                                        <label className={labelCls}>Kode Undangan Toko</label>
-                                        <div className="flex items-center gap-2">
-                                            <div className="flex-1 rounded-xl bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 px-4 py-2.5 text-gray-900 dark:text-white font-mono font-bold tracking-widest text-center">
-                                                {store.invite_code}
-                                            </div>
-                                            <button type="button"
-                                                onClick={() => { navigator.clipboard.writeText(store.invite_code); showNotif("success", "Kode berhasil disalin!"); }}
-                                                className="px-4 py-2.5 rounded-xl bg-white text-orange-500 font-semibold text-sm hover:bg-orange-50 transition">
-                                                Salin
-                                            </button>
-                                        </div>
-                                        <p className="text-xs text-gray-400 dark:text-slate-500 mt-1">Bagikan kode ini kepada karyawan untuk bergabung</p>
-                                    </div>
-                                )}
-                            </div>
-
-                            <button type="button" onClick={saveStore}
-                                disabled={storeForm.processing}
-                                className="w-full py-3 rounded-xl bg-white text-orange-500 font-bold hover:bg-orange-50 transition shadow disabled:opacity-50">
-                                {storeForm.processing ? "Menyimpan..." : "Simpan Perubahan"}
-                            </button>
-                        </GlassCard>
-                    )}
                 </div>
             </div>
 
