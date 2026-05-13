@@ -36,6 +36,6 @@ class StoreController extends Controller
 
         $store->update($data);
 
-        return redirect()->route('kelolatoko')->with('success', 'Profil toko berhasil diupdate!');
+        return redirect()->route('pengaturan')->with('success', 'Profil toko berhasil diupdate!');
     }
 }
