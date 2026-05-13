@@ -50,3 +50,52 @@ export function buildEscPos({ store, kasirName, invoiceNo, saleDate, items, tota
 
     return new Uint8Array(bytes);
 }
+
+export function buildReceiptHTML({ store, kasirName, invoiceNo, saleDate, items, total, payment, paid, change }) {
+    const ctr = (s = '') => { const p = Math.max(0, Math.floor((W - s.length) / 2)); return ' '.repeat(p) + s; };
+    const div = '-'.repeat(W);
+    const rw  = (l, r) => { const sp = Math.max(1, W - l.length - r.length); return l + ' '.repeat(sp) + r; };
+
+    const lines = [
+        `<b>${ctr(store?.name ?? 'TOKO')}</b>`,
+        ctr(store?.address ?? ''),
+        ...(store?.phone ? [ctr(store.phone)] : []),
+        div,
+        `No : ${invoiceNo}`,
+        `Tgl: ${saleDate}`,
+        `Kas: ${kasirName}`,
+        `Byr: ${payment}`,
+        div,
+    ];
+
+    for (const item of items) {
+        lines.push(item.name);
+        lines.push(rw(`  ${item.qty}x ${fmt(item.price)}`, fmt((item.price ?? 0) * (item.qty ?? 1))));
+    }
+
+    lines.push(div);
+    lines.push(`<b>${rw('TOTAL', fmt(total))}</b>`);
+
+    if (payment !== 'QRIS' && paid) {
+        lines.push(rw('Tunai', fmt(paid)));
+        lines.push(rw('Kembali', fmt(change)));
+    }
+
+    lines.push(div, ctr('Terima kasih!'), ctr('WERP'));
+
+    return `<!DOCTYPE html>
+<html lang="id"><head>
+<meta charset="UTF-8"/>
+<title>Nota ${invoiceNo}</title>
+<style>
+  body{margin:0;padding:12px;background:#fff}
+  pre{font-family:'Courier New',Courier,monospace;font-size:13px;line-height:1.6;white-space:pre;margin:0}
+  @media print{body{padding:0}}
+</style>
+</head>
+<body>
+<pre>${lines.join('\n')}</pre>
+<script>window.onload=()=>{window.print();window.onafterprint=()=>window.close();}<\/script>
+</body>
+</html>`;
+}

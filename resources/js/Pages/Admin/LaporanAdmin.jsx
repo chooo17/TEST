@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
-import { buildEscPos } from "@/helpers/escpos";
+import { buildEscPos, buildReceiptHTML } from "@/helpers/escpos";
 import { useState, useRef, useEffect, useMemo } from "react";
 import {
     AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip,
@@ -73,55 +73,17 @@ function NotaModal({ sale, onClose }) {
     const [printing, setPrinting] = useState(false);
 
     const handleBrowserPrint = () => {
-        const fmtCur = (v) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(v || 0);
-        const itemsHtml = (sale.items ?? []).map(item => `
-            <div class="item">
-                <div class="item-name">${item.name}</div>
-                <div class="item-detail"><span>${item.qty}x ${fmtCur(item.price)}</span><span>${fmtCur(item.subtotal)}</span></div>
-            </div>`).join("");
-        const cashRows = sale.payment_method !== "QRIS" && sale.paid_amount > 0 ? `
-            <div class="row"><span>Tunai</span><span>${fmtCur(sale.paid_amount)}</span></div>
-            <div class="row"><span>Kembali</span><span>${fmtCur(sale.change_amount)}</span></div>` : "";
-        const html = `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"/>
-        <title>Nota ${sale.invoice_no}</title>
-        <style>
-          body{font-family:monospace;width:300px;margin:0 auto;padding:10px;color:#000}
-          .center{text-align:center}.store-name{font-size:18px;font-weight:bold;margin-bottom:4px}
-          .store-sub{font-size:11px;margin-bottom:8px;line-height:1.5}
-          .divider{border-top:1px dashed #000;margin:8px 0}
-          .item{margin-bottom:8px}.item-name{font-weight:bold;font-size:13px}
-          .item-detail{display:flex;justify-content:space-between;font-size:12px}
-          .total-section{font-size:13px}.row{display:flex;justify-content:space-between;margin-bottom:4px}
-          .grand-total{font-size:15px;font-weight:bold}
-          .info{font-size:11px;line-height:1.7}
-          .footer{text-align:center;margin-top:14px;font-size:11px}
-          @media print{body{width:100%}}
-        </style></head><body>
-        <div class="center">
-          <div class="store-name">${sale.store_name ?? "Toko"}</div>
-          ${sale.store_address ? `<div class="store-sub">${sale.store_address}${sale.store_phone ? '<br>' + sale.store_phone : ''}</div>` : ""}
-        </div>
-        <div class="divider"></div>
-        <div class="info">
-          <div>No. Transaksi : ${sale.invoice_no}</div>
-          <div>Tanggal       : ${sale.sale_date}</div>
-          <div>Kasir         : ${sale.kasir_name ?? "-"}</div>
-          <div>Pembayaran    : ${sale.payment_method}</div>
-        </div>
-        <div class="divider"></div>
-        ${itemsHtml}
-        <div class="divider"></div>
-        <div class="total-section">
-          <div class="row grand-total"><span>TOTAL</span><span>${fmtCur(sale.grand_total)}</span></div>
-          ${cashRows}
-        </div>
-        <div class="divider"></div>
-        <div class="footer">
-          <div>Terima kasih telah berkunjung!</div>
-          <div style="margin-top:8px;font-size:13px;font-weight:bold;letter-spacing:2px;">WERP</div>
-        </div>
-        <script>window.onload=()=>{window.print();window.onafterprint=()=>window.close();}<\/script>
-        </body></html>`;
+        const html = buildReceiptHTML({
+            store: { name: sale.store_name, address: sale.store_address, phone: sale.store_phone },
+            kasirName: sale.kasir_name,
+            invoiceNo: sale.invoice_no,
+            saleDate: sale.sale_date,
+            items: sale.items ?? [],
+            total: sale.grand_total,
+            payment: sale.payment_method,
+            paid: sale.paid_amount,
+            change: sale.change_amount,
+        });
         const w = window.open("", "_blank", "width=400,height=600");
         w.document.write(html);
         w.document.close();

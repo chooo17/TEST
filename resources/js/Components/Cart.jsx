@@ -1,4 +1,4 @@
-import { buildEscPos } from '@/helpers/escpos';
+import { buildEscPos, buildReceiptHTML } from '@/helpers/escpos';
 import { useRef, useState, useEffect } from "react";
 import { ShoppingCartIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import BluetoothPrinterModal from "@/Components/BluetoothPrinterModal";
@@ -106,76 +106,6 @@ function PrintModal({ data, onPrint, onClose, formatCurrency }) {
     );
 }
 
-function buildReceiptHTML({ store, kasirName, invoiceNo, saleDate, items, total, payment, paid, change }) {
-    const fmt = (v) => new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(v || 0);
-    const logoHtml = store?.logo
-        ? `<img src="/storage/${store.logo}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-bottom:6px;" />`
-        : "";
-    const itemsHtml = items.map(item => `
-        <div class="item">
-            <div class="item-name">${item.name}</div>
-            <div class="item-detail">
-                <span>${item.qty} x ${fmt(item.price)}</span>
-                <span>${fmt(item.price * item.qty)}</span>
-            </div>
-        </div>`).join("");
-
-    const cashRows = payment !== "QRIS" ? `
-        <div class="row"><span>Tunai</span><span>${fmt(paid)}</span></div>
-        <div class="row"><span>Kembali</span><span>${fmt(change)}</span></div>` : "";
-
-    return `<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8"/>
-<title>Nota ${invoiceNo}</title>
-<style>
-  body { font-family: monospace; width: 300px; margin: 0 auto; padding: 10px; color: #000; }
-  .center { text-align: center; }
-  .store-name { font-size: 18px; font-weight: bold; margin-bottom: 4px; }
-  .store-sub { font-size: 11px; margin-bottom: 8px; line-height: 1.5; }
-  .divider { border-top: 1px dashed #000; margin: 8px 0; }
-  .item { margin-bottom: 8px; }
-  .item-name { font-weight: bold; font-size: 13px; }
-  .item-detail { display: flex; justify-content: space-between; font-size: 12px; }
-  .total-section { font-size: 13px; }
-  .row { display: flex; justify-content: space-between; margin-bottom: 4px; }
-  .grand-total { font-size: 15px; font-weight: bold; }
-  .footer { text-align: center; margin-top: 14px; font-size: 11px; }
-  .info { font-size: 11px; line-height: 1.7; }
-  @media print { body { width: 100%; } }
-</style>
-</head>
-<body>
-  <div class="center">
-    ${logoHtml}
-    <div class="store-name">${store?.name ?? "Toko"}</div>
-    <div class="store-sub">${store?.address ?? ""}<br>${store?.phone ?? ""}</div>
-  </div>
-  <div class="divider"></div>
-  <div class="info">
-    <div>No Transaksi : ${invoiceNo}</div>
-    <div>Tanggal      : ${saleDate}</div>
-    <div>Kasir        : ${kasirName}</div>
-    <div>Pembayaran   : ${payment}</div>
-  </div>
-  <div class="divider"></div>
-  ${itemsHtml}
-  <div class="divider"></div>
-  <div class="total-section">
-    <div class="row"><span>Subtotal</span><span>${fmt(total)}</span></div>
-    <div class="row grand-total"><span>Total</span><span>${fmt(total)}</span></div>
-    ${cashRows}
-  </div>
-  <div class="divider"></div>
-  <div class="footer">
-    <div>Terima kasih telah berkunjung!</div>
-    <div style="margin-top:8px;font-size:13px;font-weight:bold;letter-spacing:2px;">WERP</div>
-  </div>
-  <script>window.onload = () => { window.print(); window.onafterprint = () => window.close(); }</script>
-</body>
-</html>`;
-}
 
 export default function Cart({ cart, open, setOpen, setCart, qrisImage = null, isMobile = false, store = null, kasirName = "" }) {
     const scrollRef = useRef();
