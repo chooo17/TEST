@@ -91,6 +91,13 @@ class LaporanController extends Controller
             ? round((($labaSetelahIni - $labaSetelahLalu) / $labaSetelahLalu) * 100, 1)
             : ($labaSetelahIni > 0 ? 100 : 0);
 
+        // Pembayaran per metode
+        $byPayment = (clone $base())
+            ->whereBetween('sale_date', [$startOfMonth, $endOfMonth])
+            ->selectRaw('payment_method, SUM(grand_total) as total')
+            ->groupBy('payment_method')
+            ->pluck('total', 'payment_method');
+
         // Chart
         $chartData = (clone $base())
             ->whereBetween('sale_date', [$startOfMonth, $endOfMonth])
@@ -175,6 +182,9 @@ class LaporanController extends Controller
                 'growthPengeluaran'      => $growthPengeluaran,
                 'labaSetelahPengeluaran' => (float) $labaSetelahIni,
                 'growthLabaSetelah'      => $growthLabaSetelah,
+                'totalCash'              => (float) ($byPayment['Cash'] ?? 0),
+                'totalQris'              => (float) ($byPayment['QRIS'] ?? 0),
+                'totalDebit'             => (float) ($byPayment['Debit'] ?? 0),
             ],
             'chartData'    => $chartData,
             'kalenderData' => $kalenderData,
@@ -259,6 +269,12 @@ class LaporanController extends Controller
             ? round((($labaSetelahHariIni - $labaSetelahHariLalu) / $labaSetelahHariLalu) * 100, 1)
             : ($labaSetelahHariIni > 0 ? 100 : 0);
 
+        $byPaymentHari = (clone $base())
+            ->whereBetween('sale_date', [$hari, $hariAkhir])
+            ->selectRaw('payment_method, SUM(grand_total) as total')
+            ->groupBy('payment_method')
+            ->pluck('total', 'payment_method');
+
         return response()->json([
             'pendapatan'             => (float) $pendapatanIni,
             'growthPendapatan'       => $growthPendapatan,
@@ -273,6 +289,9 @@ class LaporanController extends Controller
             'growthPengeluaran'      => $growthPengeluaranHari,
             'labaSetelahPengeluaran' => (float) $labaSetelahHariIni,
             'growthLabaSetelah'      => $growthLabaSetelahHari,
+            'totalCash'              => (float) ($byPaymentHari['Cash'] ?? 0),
+            'totalQris'              => (float) ($byPaymentHari['QRIS'] ?? 0),
+            'totalDebit'             => (float) ($byPaymentHari['Debit'] ?? 0),
             'label'                  => Carbon::parse($request->tanggal)->locale('id')->isoFormat('dddd, D MMMM YYYY'),
             'labelBanding'           => 'vs kemarin',
         ]);

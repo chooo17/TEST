@@ -10,7 +10,7 @@ import {
     PrinterIcon, XMarkIcon, BanknotesIcon, ShoppingCartIcon,
     CubeIcon, CalendarDaysIcon, ArrowPathIcon, ArrowTrendingUpIcon,
     ArrowTrendingDownIcon, ChartBarIcon, ReceiptPercentIcon,
-    ClockIcon, FireIcon, SignalIcon,
+    ClockIcon, FireIcon, SignalIcon, QrCodeIcon, CreditCardIcon,
 } from "@heroicons/react/24/solid";
 import axios from "axios";
 import { useDarkMode } from "@/hooks/useDarkMode";
@@ -268,6 +268,9 @@ function SummarySection({ summary, bulan }) {
         { title: "Total Pesanan",             value: data ? (data.pesanan ?? 0) : "-",                   growth: data?.growthPesanan ?? 0,     icon: ShoppingCartIcon,   color: "from-rose-600 to-rose-700" },
         { title: "Pengeluaran",              value: data ? fmt(data.pengeluaran ?? 0) : "-",             growth: data?.growthPengeluaran ?? 0, icon: BanknotesIcon,      color: "from-red-600 to-red-700" },
         { title: "Laba Setelah Pengeluaran", value: data ? fmt(data.labaSetelahPengeluaran ?? 0) : "-", growth: data?.growthLabaSetelah ?? 0,  icon: ReceiptPercentIcon, color: "from-teal-600 to-teal-700" },
+        { title: "Cash",  value: data ? fmt(data.totalCash ?? 0) : "-",  growth: 0, icon: BanknotesIcon,  color: "from-emerald-600 to-emerald-700", noGrowth: true },
+        { title: "QRIS",  value: data ? fmt(data.totalQris ?? 0) : "-",  growth: 0, icon: QrCodeIcon,     color: "from-violet-600 to-violet-700",   noGrowth: true },
+        { title: "Debit", value: data ? fmt(data.totalDebit ?? 0) : "-", growth: 0, icon: CreditCardIcon, color: "from-blue-600 to-blue-700",       noGrowth: true },
     ];
 
     return (
@@ -296,7 +299,7 @@ function SummarySection({ summary, bulan }) {
 
             {error && <div className="px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl text-sm">{error}</div>}
 
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {cards.map(c => <KpiCard key={c.title} {...c} sub={sub} loading={mode === "hari" && loading} />)}
             </div>
         </div>
