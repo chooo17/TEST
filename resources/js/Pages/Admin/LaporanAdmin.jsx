@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
-import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import { Head, Link } from "@inertiajs/react";
+import { buildEscPos } from "@/helpers/escpos";
+import { useState, useRef, useEffect, useMemo } from "react";
 import {
     AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip,
     ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell, Legend,
@@ -33,169 +34,32 @@ const todayStr = () => {
 const ORANGE = ["#f97316", "#ea580c", "#c2410c", "#9a3412", "#7c2d12"];
 const PIE_COLORS = ["#f97316", "#fb923c", "#fdba74", "#fed7aa", "#ffedd5"];
 
-// ─── Bluetooth Printer ────────────────────────────────────────────────────────
-class BluetoothPrinter {
-    constructor() {
-        this.device = null;
-        this.characteristic = null;
-        // ESC/POS service & characteristic UUIDs (common thermal printers)
-        this.SERVICE_UUID = "000018f0-0000-1000-8000-00805f9b34fb";
-        this.CHAR_UUID = "00002af1-0000-1000-8000-00805f9b34fb";
-    }
-
-    async connect() {
-        try {
-            this.device = await navigator.bluetooth.requestDevice({
-                filters: [{ services: [this.SERVICE_UUID] }],
-                optionalServices: [this.SERVICE_UUID],
-            });
-            const server = await this.device.gatt.connect();
-            const service = await server.getPrimaryService(this.SERVICE_UUID);
-            this.characteristic = await service.getCharacteristic(this.CHAR_UUID);
-            return { ok: true, name: this.device.name };
-        } catch (e) {
-            // Fallback: try generic printer service
-            try {
-                this.device = await navigator.bluetooth.requestDevice({
-                    acceptAllDevices: true,
-                    optionalServices: ["000018f0-0000-1000-8000-00805f9b34fb", "e7810a71-73ae-499d-8c15-faa9aef0c3f2"],
-                });
-                const server = await this.device.gatt.connect();
-                // Try alternate UUID used by many ESC/POS printers
-                try {
-                    const svc = await server.getPrimaryService("e7810a71-73ae-499d-8c15-faa9aef0c3f2");
-                    this.characteristic = await svc.getCharacteristic("bef8d6c9-9c21-4c9e-b632-bd58c1009f9f");
-                } catch {
-                    const svc = await server.getPrimaryService("000018f0-0000-1000-8000-00805f9b34fb");
-                    this.characteristic = await svc.getCharacteristic("00002af1-0000-1000-8000-00805f9b34fb");
-                }
-                return { ok: true, name: this.device.name };
-            } catch (e2) {
-                return { ok: false, error: e2.message };
-            }
-        }
-    }
-
-    async print(data) {
-        if (!this.characteristic) return { ok: false, error: "Printer tidak terhubung" };
-        try {
-            const chunks = [];
-            for (let i = 0; i < data.length; i += 512) {
-                chunks.push(data.slice(i, i + 512));
-            }
-            for (const chunk of chunks) {
-                await this.characteristic.writeValue(chunk);
-                await new Promise(r => setTimeout(r, 50));
-            }
-            return { ok: true };
-        } catch (e) {
-            return { ok: false, error: e.message };
-        }
-    }
-
-    disconnect() {
-        if (this.device?.gatt?.connected) this.device.gatt.disconnect();
-        this.device = null;
-        this.characteristic = null;
-    }
-
-    isConnected() {
-        return !!this.device?.gatt?.connected;
-    }
-}
-
-const btPrinter = new BluetoothPrinter();
-
-// ESC/POS encoder
-function encodeEscPos(sale) {
-    const ESC = 0x1b, GS = 0x1d, LF = 0x0a;
-    const enc = new TextEncoder();
-    const bytes = [];
-
-    const push = (...args) => args.forEach(b => bytes.push(b));
-    const text = (s) => enc.encode(s).forEach(b => bytes.push(b));
-    const line = (s = "") => { text(s); push(LF); };
-    const divider = () => line("--------------------------------");
-    const centerText = (s) => {
-        const pad = Math.max(0, Math.floor((32 - s.length) / 2));
-        return " ".repeat(pad) + s;
-    };
-    const rjust = (left, right, width = 32) => {
-        const space = width - left.length - right.length;
-        return left + " ".repeat(Math.max(1, space)) + right;
-    };
-
-    // Init
-    push(ESC, 0x40); // Initialize
-    // Center align
-    push(ESC, 0x61, 0x01);
-    push(ESC, 0x21, 0x10); // Double height
-    line("WARKOP POS");
-    push(ESC, 0x21, 0x00); // Normal
-    line("Nota Pembelian");
-    push(ESC, 0x61, 0x00); // Left
-    divider();
-    line(rjust("No. Invoice:", sale.invoice_no));
-    line(rjust("Tanggal:", sale.sale_date));
-    line(rjust("Pembayaran:", sale.payment_method));
-    divider();
-
-    sale.items?.forEach(item => {
-        line(item.name);
-        const left = `  ${item.qty}x ${fmtShort(item.price)}`;
-        const right = fmtShort(item.subtotal);
-        line(rjust(left, right));
-    });
-
-    divider();
-    push(ESC, 0x21, 0x08); // Bold
-    line(rjust("TOTAL:", fmt(sale.grand_total)));
-    push(ESC, 0x21, 0x00);
-
-    if (sale.paid_amount) {
-        line(rjust("Bayar:", fmt(sale.paid_amount)));
-        line(rjust("Kembali:", fmt(sale.change_amount)));
-    }
-
-    divider();
-    push(ESC, 0x61, 0x01);
-    line("Terima kasih!");
-    line("Sampai jumpa lagi :)");
-    push(LF, LF, LF);
-    // Cut paper
-    push(GS, 0x56, 0x41, 0x03);
-
-    return new Uint8Array(bytes);
-}
+const BT_KEY = 'werp_bt_printer';
+const isNative = () => typeof window !== 'undefined' && window.Capacitor?.isNative;
+const getSavedPrinter = () => { try { return JSON.parse(localStorage.getItem(BT_KEY)); } catch { return null; } };
 
 // ─── Bluetooth Status Bar ─────────────────────────────────────────────────────
-function BluetoothBar({ btState, onConnect, onDisconnect }) {
+function BluetoothBar() {
+    const saved = getSavedPrinter();
+    if (!isNative()) return null;
     return (
-        <div className={`flex items-center gap-3 px-4 py-2 rounded-xl border text-xs font-medium transition-all ${
-            btState.connected
+        <div className={`flex items-center gap-3 px-4 py-2 rounded-xl border text-xs font-medium ${
+            saved
                 ? "bg-green-500/10 border-green-500/30 text-green-400"
                 : "bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-400 dark:text-white/40"
         }`}>
-            <SignalIcon className={`w-3.5 h-3.5 ${btState.connected ? "text-green-400" : "text-gray-400 dark:text-white/30"}`} />
-            {btState.connected ? (
+            <SignalIcon className={`w-3.5 h-3.5 ${saved ? "text-green-400" : "text-gray-400 dark:text-white/30"}`} />
+            {saved ? (
                 <>
-                    <span>Printer: <strong className="text-green-300">{btState.name}</strong></span>
-                    <button onClick={onDisconnect}
-                        className="ml-auto text-red-400 hover:text-red-300 transition">
-                        Putuskan
-                    </button>
+                    <span>Printer: <strong className="text-green-300">{saved.name}</strong></span>
+                    <Link href="/pengaturan" className="ml-auto text-orange-400 hover:text-orange-300 transition">Ubah</Link>
                 </>
             ) : (
                 <>
-                    <span>Printer Bluetooth tidak terhubung</span>
-                    <button onClick={onConnect}
-                        disabled={btState.loading}
-                        className="ml-auto flex items-center gap-1 px-3 py-1 bg-orange-500 hover:bg-orange-400 text-white rounded-lg transition disabled:opacity-50">
-                        {btState.loading
-                            ? <ArrowPathIcon className="w-3 h-3 animate-spin" />
-                            : <PrinterIcon className="w-3 h-3" />}
-                        {btState.loading ? "Mencari..." : "Hubungkan"}
-                    </button>
+                    <span>Belum ada printer tersimpan</span>
+                    <Link href="/pengaturan" className="ml-auto flex items-center gap-1 px-3 py-1 bg-orange-500 hover:bg-orange-400 text-white rounded-lg transition">
+                        <PrinterIcon className="w-3 h-3" /> Atur di Pengaturan
+                    </Link>
                 </>
             )}
         </div>
@@ -203,7 +67,7 @@ function BluetoothBar({ btState, onConnect, onDisconnect }) {
 }
 
 // ─── Nota Modal ───────────────────────────────────────────────────────────────
-function NotaModal({ sale, onClose, btState, onConnect }) {
+function NotaModal({ sale, onClose }) {
     const printRef = useRef();
     const [btMsg, setBtMsg] = useState(null);
     const [printing, setPrinting] = useState(false);
@@ -263,19 +127,40 @@ function NotaModal({ sale, onClose, btState, onConnect }) {
         w.document.close();
     };
 
-    const handleBTPrint = async () => {
-        if (!btState.connected) {
-            setBtMsg({ type: "error", text: "Printer belum terhubung. Hubungkan dulu." });
+    const handleBTPrint = () => {
+        if (!isNative()) {
+            setBtMsg({ type: "error", text: "Fitur ini hanya tersedia di aplikasi Android." });
+            return;
+        }
+        const saved = getSavedPrinter();
+        if (!saved?.address) {
+            setBtMsg({ type: "error", text: "Belum ada printer tersimpan. Atur di Pengaturan → Printer." });
             return;
         }
         setPrinting(true);
         setBtMsg(null);
-        const data = encodeEscPos(sale);
-        const res = await btPrinter.print(data);
-        setPrinting(false);
-        setBtMsg(res.ok
-            ? { type: "ok", text: "Berhasil dicetak!" }
-            : { type: "error", text: res.error });
+        const bt = window.bluetoothSerial;
+        const bytes = buildEscPos({
+            store: { name: sale.store_name, address: sale.store_address, phone: sale.store_phone },
+            kasirName: sale.kasir_name,
+            invoiceNo: sale.invoice_no,
+            saleDate: sale.sale_date,
+            items: sale.items ?? [],
+            total: sale.grand_total,
+            payment: sale.payment_method,
+            paid: sale.paid_amount,
+            change: sale.change_amount,
+        });
+        bt.connect(
+            saved.address,
+            () => {
+                bt.write(bytes,
+                    () => { setPrinting(false); setBtMsg({ type: "ok", text: "Berhasil dicetak!" }); },
+                    (e) => { setPrinting(false); setBtMsg({ type: "error", text: "Gagal kirim data: " + e }); }
+                );
+            },
+            (e) => { setPrinting(false); setBtMsg({ type: "error", text: "Gagal connect: " + e }); }
+        );
     };
 
     return (
@@ -303,13 +188,13 @@ function NotaModal({ sale, onClose, btState, onConnect }) {
                 </div>
 
                 {/* BT status */}
-                {!btState.connected && (
+                {isNative() && !getSavedPrinter() && (
                     <div className="px-5 pt-3">
-                        <button onClick={onConnect}
+                        <Link href="/pengaturan"
                             className="w-full flex items-center justify-center gap-2 py-2 bg-orange-500/20 border border-orange-500/30 text-orange-300 rounded-xl text-xs hover:bg-orange-500/30 transition">
                             <SignalIcon className="w-3.5 h-3.5" />
-                            Hubungkan printer Bluetooth untuk cetak langsung
-                        </button>
+                            Atur printer Bluetooth di Pengaturan
+                        </Link>
                     </div>
                 )}
 
@@ -773,23 +658,6 @@ export default function LaporanAdmin({
 }) {
     const { isDark } = useDarkMode();
     const [selectedSale, setSelectedSale] = useState(null);
-    const [btState, setBtState] = useState({ connected: false, loading: false, name: null });
-
-    const connectBT = useCallback(async () => {
-        if (!navigator.bluetooth) {
-            alert("Browser ini tidak mendukung Web Bluetooth. Gunakan Chrome/Edge terbaru.");
-            return;
-        }
-        setBtState(s => ({ ...s, loading: true }));
-        const res = await btPrinter.connect();
-        setBtState({ connected: res.ok, loading: false, name: res.ok ? res.name : null });
-        if (!res.ok) alert(`Gagal terhubung: ${res.error}`);
-    }, []);
-
-    const disconnectBT = useCallback(() => {
-        btPrinter.disconnect();
-        setBtState({ connected: false, loading: false, name: null });
-    }, []);
 
     // Hitung statistik tambahan
     const stats = useMemo(() => {
@@ -808,8 +676,6 @@ export default function LaporanAdmin({
                 <NotaModal
                     sale={selectedSale}
                     onClose={() => setSelectedSale(null)}
-                    btState={btState}
-                    onConnect={connectBT}
                 />
             )}
 
@@ -822,7 +688,7 @@ export default function LaporanAdmin({
                         <h1 className="text-3xl font-bold leading-tight text-gray-900 dark:text-white">Laporan Penjualan</h1>
                         <p className="text-gray-400 dark:text-white/40 text-sm mt-1">{bulan}</p>
                     </div>
-                    <BluetoothBar btState={btState} onConnect={connectBT} onDisconnect={disconnectBT} />
+                    <BluetoothBar />
                 </div>
 
                 {/* ── KPI Cards + Toggle ── */}
