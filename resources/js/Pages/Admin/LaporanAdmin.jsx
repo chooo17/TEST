@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
-import { buildEscPos, buildReceiptHTML, buildLogoBytes } from "@/helpers/escpos";
+import { buildEscPos, buildReceiptHTML, buildReceiptText, buildLogoBytes } from "@/helpers/escpos";
 import { useState, useRef, useEffect, useMemo } from "react";
 import {
     AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip,
@@ -173,42 +173,25 @@ function NotaModal({ sale, onClose }) {
                 )}
 
                 {/* Nota */}
-                <div ref={printRef} className="p-5 font-mono text-sm text-white bg-[#1a1a1a]">
-                    <div className="text-center font-bold text-lg mb-0.5">{sale.store_name ?? "Toko"}</div>
-                    {sale.store_address && <div className="text-center text-xs text-white/40">{sale.store_address}</div>}
-                    {sale.store_phone && <div className="text-center text-xs text-white/40 mb-3">{sale.store_phone}</div>}
-                    <div className="border-t border-dashed border-white/20 my-2" />
-                    {[["No. Transaksi", sale.invoice_no], ["Tanggal", sale.sale_date], ["Kasir", sale.kasir_name], ["Pembayaran", sale.payment_method]].map(([k, v]) => v ? (
-                        <div key={k} className="flex justify-between text-xs py-0.5">
-                            <span className="text-white/50">{k}</span>
-                            <span className="font-semibold">{v}</span>
+                <div ref={printRef} className="px-5 py-4 bg-[#1a1a1a]">
+                    {sale.store_logo && (
+                        <div className="flex justify-center mb-3">
+                            <img src={`/storage/${sale.store_logo}`} className="w-16 h-16 rounded-full object-cover" />
                         </div>
-                    ) : null)}
-                    <div className="border-t border-dashed border-white/20 my-2" />
-                    {sale.items?.map((item, i) => (
-                        <div key={i} className="mb-1.5">
-                            <div className="font-semibold text-xs">{item.name}</div>
-                            <div className="flex justify-between text-xs text-white/50">
-                                <span>{item.qty}x {fmt(item.price)}</span>
-                                <span className="text-white">{fmt(item.subtotal)}</span>
-                            </div>
-                        </div>
-                    ))}
-                    <div className="border-t border-dashed border-white/20 my-2" />
-                    <div className="flex justify-between font-bold text-sm">
-                        <span>TOTAL</span><span className="text-orange-400">{fmt(sale.grand_total)}</span>
-                    </div>
-                    {sale.paid_amount > 0 && <>
-                        <div className="flex justify-between text-xs text-white/50 mt-1">
-                            <span>Bayar</span><span>{fmt(sale.paid_amount)}</span>
-                        </div>
-                        <div className="flex justify-between text-xs text-white/50">
-                            <span>Kembali</span><span>{fmt(sale.change_amount)}</span>
-                        </div>
-                    </>}
-                    <div className="border-t border-dashed border-white/20 my-2 mt-4" />
-                    <div className="text-center text-xs text-white/30">Terima kasih telah berkunjung!</div>
-                    <div className="text-center text-sm font-bold tracking-widest text-white/50 mt-1">WERP</div>
+                    )}
+                    <pre className="font-mono text-xs text-white/90 whitespace-pre leading-5 overflow-x-auto">
+                        {buildReceiptText({
+                            store: { name: sale.store_name, address: sale.store_address, phone: sale.store_phone },
+                            kasirName: sale.kasir_name,
+                            invoiceNo: sale.invoice_no,
+                            saleDate: sale.sale_date,
+                            items: sale.items ?? [],
+                            total: sale.grand_total,
+                            payment: sale.payment_method,
+                            paid: sale.paid_amount,
+                            change: sale.change_amount,
+                        })}
+                    </pre>
                 </div>
             </div>
         </div>

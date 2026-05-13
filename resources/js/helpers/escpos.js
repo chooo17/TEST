@@ -97,6 +97,40 @@ export function buildEscPos({ store, kasirName, invoiceNo, saleDate, items, tota
     return new Uint8Array(bytes);
 }
 
+export function buildReceiptText({ store, kasirName, invoiceNo, saleDate, items, total, payment, paid, change }) {
+    const ctr = (s = '') => { const p = Math.max(0, Math.floor((W - s.length) / 2)); return ' '.repeat(p) + s; };
+    const div = '-'.repeat(W);
+    const rw  = (l, r) => { const sp = Math.max(1, W - l.length - r.length); return l + ' '.repeat(sp) + r; };
+
+    const lines = [
+        ctr(store?.name ?? 'TOKO'),
+        ctr(store?.address ?? ''),
+        ...(store?.phone ? [ctr(store.phone)] : []),
+        div,
+        `No : ${invoiceNo}`,
+        `Tgl: ${saleDate}`,
+        `Kas: ${kasirName}`,
+        `Byr: ${payment}`,
+        div,
+    ];
+
+    for (const item of items) {
+        lines.push(item.name);
+        lines.push(rw(`  ${item.qty}x ${fmt(item.price)}`, fmt((item.price ?? 0) * (item.qty ?? 1))));
+    }
+
+    lines.push(div);
+    lines.push(rw('TOTAL', fmt(total)));
+
+    if (payment !== 'QRIS' && paid) {
+        lines.push(rw('Tunai', fmt(paid)));
+        lines.push(rw('Kembali', fmt(change)));
+    }
+
+    lines.push(div, ctr('Terima kasih!'), ctr('WERP'));
+    return lines.join('\n');
+}
+
 export function buildReceiptHTML({ store, kasirName, invoiceNo, saleDate, items, total, payment, paid, change }) {
     const ctr = (s = '') => { const p = Math.max(0, Math.floor((W - s.length) / 2)); return ' '.repeat(p) + s; };
     const div = '-'.repeat(W);
