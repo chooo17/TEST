@@ -50,13 +50,18 @@ function PrinterTab() {
     const [error, setError]           = useState(null);
 
     const bt = () => window.bluetoothSerial;
+    const fmtErr = (e) => (typeof e === 'string' ? e : (e?.message ?? JSON.stringify(e) ?? 'Unknown error'));
 
     const scan = (silent = false) => {
+        if (!window.bluetoothSerial) {
+            if (!silent) setError('Plugin Bluetooth tidak tersedia. Pastikan menggunakan aplikasi Android, bukan browser.');
+            return;
+        }
         if (!silent) setScanning(true);
         setError(null);
 
         const doList = () => {
-            bt()?.list(
+            bt().list(
                 (list) => {
                     setDevices(list ?? []);
                     setScanning(false);
@@ -66,17 +71,16 @@ function PrinterTab() {
                 },
                 (err) => {
                     setScanning(false);
-                    setError('Gagal scan: ' + err + '. Pastikan Bluetooth aktif dan izin diberikan.');
+                    setError('Gagal scan: ' + fmtErr(err) + '. Pastikan Bluetooth aktif dan izin diberikan.');
                 }
             );
         };
 
-        // Cek apakah Bluetooth aktif dulu
-        bt()?.isEnabled(
+        bt().isEnabled(
             () => doList(),
             () => {
                 setScanning(false);
-                setError('Bluetooth tidak aktif. Aktifkan Bluetooth terlebih dahulu.');
+                if (!silent) setError('Bluetooth tidak aktif. Aktifkan Bluetooth terlebih dahulu.');
             }
         );
     };
@@ -84,28 +88,34 @@ function PrinterTab() {
     useEffect(() => {
         if (!isNative()) return;
 
-        // Auto-scan saat tab dibuka supaya daftar device langsung muncul
         scan(true);
 
-        // Cek status koneksi device tersimpan
         const s = (() => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch { return null; } })();
-        if (!s?.address) return;
-        bt()?.isConnected(
+        if (!s?.address || !window.bluetoothSerial) return;
+
+        bt().isConnected(
             () => { setConnected(true); },
             () => {
                 setConnecting(s.address);
-                bt()?.connect(s.address,
+                bt().connect(s.address,
                     () => { setConnected(true); setConnecting(null); },
-                    () => { setConnecting(null); }
+                    (err) => {
+                        setConnecting(null);
+                        setError('Auto-connect gagal: ' + fmtErr(err));
+                    }
                 );
             }
         );
     }, []);
 
     const connectTo = (device) => {
+        if (!window.bluetoothSerial) {
+            setError('Plugin Bluetooth tidak tersedia. Pastikan menggunakan aplikasi Android.');
+            return;
+        }
         setConnecting(device.address);
         setError(null);
-        bt()?.connect(
+        bt().connect(
             device.address,
             () => {
                 setConnected(true);
@@ -115,7 +125,7 @@ function PrinterTab() {
             },
             (err) => {
                 setConnecting(null);
-                setError('Gagal connect: ' + err);
+                setError('Gagal connect ke ' + (device.name ?? device.address) + ': ' + fmtErr(err));
             }
         );
     };
