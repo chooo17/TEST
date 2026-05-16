@@ -114,7 +114,7 @@ function AddModal({ materials, onClose }) {
                                 <div>
                                     <label className={labelCls}>Qty</label>
                                     <input type="number" value={data.qty} onChange={(e) => handleQtyChange(e.target.value)}
-                                        min="0.01" step="0.01" placeholder="0" className={inputCls} />
+                                        step="any" min="0" placeholder="0" className={inputCls} />
                                     {errors.qty && <p className="text-red-500 text-xs mt-1">{errors.qty}</p>}
                                 </div>
                                 <div>
@@ -147,7 +147,7 @@ function AddModal({ materials, onClose }) {
                             <div>
                                 <label className={labelCls}>Jumlah (Rp)</label>
                                 <input type="number" value={data.amount} onChange={(e) => setData('amount', e.target.value)}
-                                    min="0.01" placeholder="0" className={inputCls} />
+                                    step="any" min="0" placeholder="0" className={inputCls} />
                                 {errors.amount && <p className="text-red-500 text-xs mt-1">{errors.amount}</p>}
                             </div>
                         </>
